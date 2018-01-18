@@ -1,0 +1,1 @@
+- Jquery UI, 경량화 상태에서 로컬 save, load 구현된 상태

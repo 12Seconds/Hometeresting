@@ -22,7 +22,11 @@
         // 공통 div -------------------------------------------------
         oi.divButton = oi.document.getElementById("button");
         oi.divSideinfo = oi.document.getElementById("sideinfo");
+<<<<<<< HEAD
         oi.divIconBack = oi.document.getElementById("iconBackLo");
+=======
+      
+>>>>>>> dev_lih
         oi.divContent = oi.document.getElementById("content");
 
         // 홈메뉴 div -----------------------------------------------
@@ -33,6 +37,11 @@
             oi.divIcons[i] = oi.document.getElementById("iconLo"+(i+1));
         }
 
+<<<<<<< HEAD
+=======
+        // 에셋 APP div ---------------------------------------------
+        oi.assetapp = oi.document.getElementById("asset");
+>>>>>>> dev_lih
         // 에셋 카테고리 div -----------------------------------------
         oi.divAssetCategory = oi.document.getElementById("assetCategory");
         oi.divCategory = [];
@@ -56,6 +65,7 @@
 
         // 공통 div Event =====================================================================
 
+<<<<<<< HEAD
         // MainMenu and Button Move Event
         oi.HudMoveEvent = function()
         {     
@@ -103,14 +113,20 @@
                 setTimeout(function(){ oi.divSideinfo.style.visibility = 'hidden'; }, 250);
             }   
         }
+=======
+
+>>>>>>> dev_lih
 
         oi.GoHOME = function()
         {
            // alert("go home");   
+<<<<<<< HEAD
             oi.divHomeMenu.style.display='block';
             oi.divAssetCategory.style.display='none';
             oi.divAssetList.style.display='none';
 
+=======
+>>>>>>> dev_lih
             var delDiv = oi.document.getElementById("bucketList");
             while(delDiv.firstChild){
                 delDiv.removeChild(delDiv.firstChild);
@@ -130,8 +146,13 @@
         }
         
         oi.blockDiv = function(event){ // All Div Block and Opacity transparent
+<<<<<<< HEAD
             oi.divButton.style.visibility = 'hidden';
             oi.HudMoveEvent();
+=======
+            oi.assetapp.style.visibility = 'hidden';
+
+>>>>>>> dev_lih
         }
         
         oi.unblockDiv = function(event){  // All Div unBlock
@@ -145,8 +166,12 @@
             });
 
             oi.isAssetAllocate=false;
+<<<<<<< HEAD
             oi.divButton.style.visibility = 'visible';
             oi.HudMoveEvent();
+=======
+            oi.assetapp.style.visibility = 'visible';
+>>>>>>> dev_lih
             oi.document.removeEventListener('click',oi.assetAllocate,false);
         }
 
@@ -154,6 +179,7 @@
 
         // 홈메뉴 div Event =====================================================================
 
+<<<<<<< HEAD
         oi.iconLo1Click = function()
         {
             //if(oi.divAssetCategory.style.display==""){
@@ -163,6 +189,8 @@
                 oi.divAssetList.style.display='none';
            //     alert("hi, i am first icon");
         }
+=======
+>>>>>>> dev_lih
 
         // 홈메뉴 div Event End =====================================================================
 
@@ -196,6 +224,7 @@
                 oi.dic.assetDic[targetDiv.id].then(function(obj){
                     oi.Preview.sceneReset();
                     var viewAsset = obj.clone();
+<<<<<<< HEAD
                     viewAsset.position.set(0,0,0);
                     if(viewAsset.name=="bed"){
                         viewAsset.scale.set(3,3,3);
@@ -203,6 +232,10 @@
                     }
                     else
                         viewAsset.scale.set(10,10,10);
+=======
+                    viewAsset.position.set(0,2,0);
+                    viewAsset.scale.set(8,8,8);
+>>>>>>> dev_lih
                     viewAsset.name = "viewAsset";
                     oi.Preview.scene.add(viewAsset);
                 });  
@@ -248,8 +281,14 @@
           oi.addButtonClick = function(event)
         {
             var target = event.target;
+<<<<<<< HEAD
             if(oi.selectedDiv !== null){
                 if(target.id =="addtoScene" && oi.isAssetAllocate==false)
+=======
+              
+            if(oi.selectedDiv !== null){
+                if(target.id =="iconimg" && oi.isAssetAllocate==false)
+>>>>>>> dev_lih
                 {
                     oi.isAssetAllocate=true;
                     oi.blockDiv();
@@ -279,10 +318,15 @@
                     oi.dic.assetDic[oi.selectedDiv.id].then(function(obj){
                         var traceAsset = obj.clone();
                         traceAsset.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+<<<<<<< HEAD
                         if(traceAsset.name=="bed")
                             traceAsset.scale.set(3,3,3);
                         else
                             traceAsset.scale.set(10,10,10);
+=======
+
+                        traceAsset.scale.set(10,10,10);
+>>>>>>> dev_lih
                         
                         traceAsset.name = "traceAsset";
                         oi.mainRoom.scene.add(traceAsset);
@@ -319,12 +363,20 @@
                     oi.dic.assetDic[oi.selectedDiv.id].then(function(obj){
                         var newAsset = obj.clone();
                         newAsset.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+<<<<<<< HEAD
                         if(newAsset.name=="bed")
                             newAsset.scale.set(3,3,3);
                         else
                             newAsset.scale.set(10,10,10);
                         
                         newAsset.name = "newAsset";
+=======
+
+                        newAsset.scale.set(10,10,10);
+                        
+                        newAsset.name = oi.selectedDiv.id;
+                        
+>>>>>>> dev_lih
                         oi.Assets.interTarget.push(newAsset);
                         oi.mainRoom.scene.add(newAsset);
                     });
@@ -337,9 +389,15 @@
         // Furniture Tab -------------------
         oi.categoryLo1Click = function()
         {
+<<<<<<< HEAD
             oi.divHomeMenu.style.display='none';
             oi.divAssetCategory.style.display='none';
             var path = "url('OI_resource/asset/furniture/";
+=======
+           
+            oi.divAssetCategory.style.display='none';
+            var path = "OI_resource/asset/furniture/";
+>>>>>>> dev_lih
 
             for(var i=0; i<oi.Assets.furnNames.length;i++)
             {
@@ -349,7 +407,11 @@
 
                 oi.divFurns[i].setAttribute("style", "background-color:rgba("+i*40+",206,250,0.7);"+
                                                      "overflow-y:auto;"+
+<<<<<<< HEAD
                                                      "width:98%; height: 7%;"+
+=======
+                                                     "width:99%; height: 7%;"+
+>>>>>>> dev_lih
                                                      "border-width:2px; border-color:gray; border-style:solid");
                 oi.divBucketList.appendChild(oi.divFurns[i]); // body의 자식 노드로 첨부 (필수)
 
@@ -360,6 +422,7 @@
                 for(var j=0; j<oi.Assets.furnCnts[i]; j++)
                 {
                     oi.divTemp = oi.document.createElement('DIV');
+<<<<<<< HEAD
                     oi.divTemp.setAttribute('id',oi.Assets.furnNames[i]+j);
                     oi.divTemp.setAttribute("style", "background-image:"+path+asset+"/"+asset+j+"/"+asset+".png');"+
                                                      "background-repeat: no-repeat;"+
@@ -369,6 +432,15 @@
                                                      "margin:5 auto;"+
                                                      "border-radius: 1em 1em 1em 1em;"+
                                                      "overflow-y:auto;");
+=======
+                    oi.divTemp.scrollState = false;
+                    oi.divTemp.setAttribute('id',oi.Assets.furnNames[i]+j);
+                    var assetid = oi.Assets.furnNames[i]+j; 
+                    oi.divTemp.setAttribute("style","width : 70%; height: 37%;"+
+                                                     "margin:5 auto;"+
+                                                     "border-radius: 1em 1em 1em 1em;");
+                    oi.divTemp.innerHTML='<img id="'+assetid+'" class ="iconimg" src ="'+path+asset+'/'+asset+j+'/'+asset+'.png">';
+>>>>>>> dev_lih
                     oi.divTemp.style.display = "none";
                     oi.divFurns[i].appendChild(oi.divTemp);
                 }
@@ -383,9 +455,15 @@
         // Ornament Tab ---------------------
         oi.categoryLo2Click = function() // 장식품 탭 클릭
         {
+<<<<<<< HEAD
             oi.divHomeMenu.style.display='none';
             oi.divAssetCategory.style.display='none';
             var path = "url('OI_resource/asset/ornament/";
+=======
+           
+            oi.divAssetCategory.style.display='none';
+            var path = "OI_resource/asset/ornament/";
+>>>>>>> dev_lih
 
             for(var i=0; i<oi.Assets.ornaNames.length;i++)
             {
@@ -395,7 +473,11 @@
 
                 oi.divOrnas[i].setAttribute("style", "background-color:rgba("+i*40+",206,250,0.7);"+
                                                      "overflow-y:auto;"+
+<<<<<<< HEAD
                                                      "width:98%; height: 7%;"+
+=======
+                                                     "width:99%; height: 7%;"+
+>>>>>>> dev_lih
                                                      "border-width:2px; border-color:gray; border-style:solid");
                 oi.divBucketList.appendChild(oi.divOrnas[i]); // body의 자식 노드로 첨부 (필수)
 
@@ -407,6 +489,7 @@
                 {
                     oi.divTemp = oi.document.createElement('DIV');
                     oi.divTemp.setAttribute('id',oi.Assets.ornaNames[i]+j);
+<<<<<<< HEAD
                     oi.divTemp.setAttribute("style", "background-image:"+path+asset+"/"+asset+j+"/"+asset+".png');"+
                                                      "background-repeat: no-repeat;"+
                                                      "background-size:cover;"+
@@ -415,6 +498,13 @@
                                                      "margin:5 auto;"+
                                                      "border-radius: 1em 1em 1em 1em;"+
                                                      "overflow-y:auto;");
+=======
+                    var assetid = oi.Assets.ornaNames[i]+j; 
+                    oi.divTemp.setAttribute("style", "width : 70%; height: 35%;"+
+                                                     "margin:5 auto;"+
+                                                     "border-radius: 1em 1em 1em 1em;");
+                    oi.divTemp.innerHTML='<img id="'+assetid+'" class ="iconimg" src ="'+path+asset+'/'+asset+j+'/'+asset+'.png">';
+>>>>>>> dev_lih
                     oi.divTemp.style.display = "none";
                     oi.divOrnas[i].appendChild(oi.divTemp);
                 }
@@ -429,9 +519,15 @@
         // Structure Tab ---------------------
         oi.categoryLo3Click = function() // 구조 탭 클릭
         {
+<<<<<<< HEAD
             oi.divHomeMenu.style.display='none';
             oi.divAssetCategory.style.display='none';
             var path = "url('OI_resource/asset/structure/";
+=======
+           
+            oi.divAssetCategory.style.display='none';
+            var path = "OI_resource/asset/structure/";
+>>>>>>> dev_lih
 
             for(var i=0; i<oi.Assets.strucNames.length;i++)
             {
@@ -441,7 +537,11 @@
 
                 oi.divStrucs[i].setAttribute("style", "background-color:rgba("+i*40+",206,250,0.7);"+
                                                      "overflow-y:auto;"+
+<<<<<<< HEAD
                                                      "width:98%; height: 7%;"+
+=======
+                                                     "width:99%; height: 7%;"+
+>>>>>>> dev_lih
                                                      "border-width:2px; border-color:gray; border-style:solid");
                 oi.divBucketList.appendChild(oi.divStrucs[i]); // body의 자식 노드로 첨부 (필수)
 
@@ -453,6 +553,7 @@
                 {
                     oi.divTemp = oi.document.createElement('DIV');
                     oi.divTemp.setAttribute('id',oi.Assets.strucNames[i]+j);
+<<<<<<< HEAD
                     oi.divTemp.setAttribute("style", "background-image:"+path+asset+"/"+asset+j+"/"+asset+".png');"+
                                                      "background-repeat: no-repeat;"+
                                                      "background-size:cover;"+
@@ -461,6 +562,13 @@
                                                      "margin:5 auto;"+
                                                      "border-radius: 1em 1em 1em 1em;"+
                                                      "overflow-y:auto;");
+=======
+                    var assetid = oi.Assets.strucNames[i]+j;
+                    oi.divTemp.setAttribute("style", "width : 70%; height: 35%;"+
+                                                     "margin:5 auto;"+
+                                                     "border-radius: 1em 1em 1em 1em;");
+                     oi.divTemp.innerHTML='<img id="'+assetid+'" class ="iconimg" src ="'+path+asset+'/'+asset+j+'/'+asset+'.png">';
+>>>>>>> dev_lih
                     oi.divTemp.style.display = "none";
                     oi.divStrucs[i].appendChild(oi.divTemp);
                 }
@@ -557,6 +665,7 @@
             }
         }
         */
+<<<<<<< HEAD
         
         // 홈 아이콘 이벤트 함수
         oi.homeIconOver = function(){ oi.divIconBack.style.opacity='0.8';}
@@ -565,6 +674,28 @@
         oi.homeIconUp = function()  { oi.divIconBack.style.opacity='0.8';}
         //  아이콘 이벤트 함수
          oi.IconOver = function(){ oi.divIcons[0].style.opacity='0.8';}
+=======
+        // SAVE & LOAD 임시 
+        oi.iconLo5Click = function() // 테스트 저장 함수
+        {
+            var sceneManager = new SceneManager("user1");
+            
+            sceneManager.sceneSave(oi.mainRoom.scene);
+        }
+        
+        oi.iconLo6Click = function() // 테스트 불러오기 함수
+        {
+            var sceneManager = new SceneManager("user1");
+            
+            sceneManager.sceneLoad(oi);
+        }
+        
+        
+        
+      
+        //  아이콘 이벤트 함수
+        oi.IconOver = function(){ oi.divIcons[0].style.opacity='0.8';}
+>>>>>>> dev_lih
         oi.IconOut = function()  { oi.divIcons[0].style.opacity='1';}
         oi.IconDown = function() { oi.divIcons[0].style.opacity='1';}
         oi.IconUp = function()   { oi.divIcons[0].style.opacity='0.8';}
@@ -600,10 +731,16 @@
         // 에셋카테고리 및 리스트 div Event End =====================================================================
 
         // Add Event Listener ===========================================================================
+<<<<<<< HEAD
    
         // 공통 Event Listener --------------------------
         oi.divButton.addEventListener('click', bind( oi, oi.HudMoveEvent ),false);    
         oi.divIconBack.addEventListener('click', bind(oi, oi.GoHOME), false);
+=======
+        
+        // 공통 Event Listener -------------------------- 
+    
+>>>>>>> dev_lih
         oi.divContent.addEventListener('click',bind(oi,oi.clickToModify), false);
         
         oi.divButton.addEventListener( 'contextmenu', bind(oi,oi.blockClick), false );
@@ -612,10 +749,22 @@
         oi.document.addEventListener('mousemove',bind(oi,oi.onMouseMove), false);
         oi.document.addEventListener('keyup',oi.onDocumentKeyUp, false);
         //oi.document.addEventListener('keydown',oi.onDocumentKeyDown, false);
+<<<<<<< HEAD
 
         // 홈메뉴 Event Listener ------------------------
         oi.divIcons[0].addEventListener('click', bind( oi, oi.iconLo1Click), false);
 
+=======
+        
+        // SAVE & LOAD 임시
+        oi.divIcons[4].addEventListener("click", bind( oi, oi.iconLo5Click), false);   // save 테스트 버튼
+        oi.divIcons[5].addEventListener("click", bind( oi, oi.iconLo6Click), false);   // load 테스트 버튼
+        
+        
+        
+        
+        
+>>>>>>> dev_lih
         // 에셋 카테고리 및 리스트 Event Listener -------------------
         oi.divCategory[0].addEventListener('click',bind(oi, oi.categoryLo1Click), false); // furniture category
         oi.divCategory[1].addEventListener('click',bind(oi, oi.categoryLo2Click), false); // ornament category
@@ -623,11 +772,15 @@
         oi.divBackArrow.addEventListener('click',bind(oi,oi.assetBackArrow),false); // asset list back arrow
         oi.divAddButton.addEventListener('click',bind(oi,oi.addButtonClick), false); // 에셋 배치 버튼
         // 아이콘 오버 + 아웃 효과  Event Listener ------------------------
+<<<<<<< HEAD
         //-홈 아이콘
         oi.divIconBack.addEventListener('mouseover',bind(oi,oi.homeIconOver),false);
         oi.divIconBack.addEventListener('mouseout',bind(oi,oi.homeIconOut),false);
         oi.divIconBack.addEventListener('mousedown',bind(oi,oi.homeIconDown),false);
         oi.divIconBack.addEventListener('mouseup',bind(oi,oi.homeIconUp),false);
+=======
+      
+>>>>>>> dev_lih
         //-애셋 아이콘
         oi.divIcons[0].addEventListener('mouseover',bind(oi,oi.IconOver),false);
         oi.divIcons[0].addEventListener('mouseout',bind(oi,oi.IconOut),false);
