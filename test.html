@@ -1,0 +1,181 @@
+<html>
+<head>
+    <script type="text/javascript" src="THREE_JS/three.js"></script>
+    <script type="text/javascript" src="THREE_JS/js/libs/bluebird.js"></script>
+    <script type="text/javascript" src="THREE_JS/js/controls/TransformControls.js"></script>
+    <script type="text/javascript" src='THREE_JS/js/libs/stats.js'></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_Camera.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_MainScene.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_PreviewScene.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_Assets.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_Event.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_AssetDic.js"></script>
+    <script type="text/javascript" src="OI_resource/OI_js/OI_SceneManager.js"></script>
+    <script type="text/javascript" src="Jquery/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="Jquery/jquery-ui.js"></script>
+    
+    <link rel = "stylesheet" type="text/css" href="HdStylesheet.css"> 
+
+    <!-- jquery ui 전용 css  !-->  
+    <link rel="stylesheet" href="Jquery/jquery-ui.theme.css">
+    <link rel="stylesheet" href="Jquery/jquery-ui.structure.css">
+
+</head>
+
+<body>
+
+<div id="header">
+    ID : Developer
+    <img src="OI_resource/customHud/icons/down/southkorea(2).png" width="25px" height="25px" style="vertical-align: middle">
+</div>
+<div id="content"></div>
+<div id="button" class="buttonLo"><img id="imgButtonLo" src="OI_resource/customHud/icons/menu.png" ></div>
+
+<div id="sideinfo">
+
+    <div id="homeMenue">
+        <div id="iconLo1" class="icon"><img id="iconimg" src="OI_resource/customHud/icons/shopIcon.png"></div>
+        <div id="iconLo2" class="icon"></div>
+        <div id="iconLo3" class="icon"></div>
+        <div id="iconLo4" class="icon"></div>
+        <div id="iconLo5" class="icon">save</div>
+        <div id="iconLo6" class="icon">load</div>
+    </div>
+</div>
+
+<div id="asset">
+   <div id="assetExit" class ="exit"></div>
+    <div id="assetCategory" class="ui-widget-content">
+        <div id="categoryLo1" class="category"><img id="iconimg" src="OI_resource/customHud/icons/furnitures.jpg"></div>
+        <div id="categoryLo2" class="category"><img id="iconimg" src="OI_resource/customHud/icons/ornaments.jpg"></div>
+        <div id="categoryLo3" class="category"><img id="iconimg" src="OI_resource/customHud/icons/structure.jpg"></div>
+        <div id="categoryLo4" class="category"><img id="iconimg" src="OI_resource/customHud/icons/wallpaper.jpg"></div>
+        <div id="searchSpace">검색기능</div>
+    </div>
+
+    <div id="assetList">
+        <div id="preview"></div>
+        <div id="backArrow"><img id="iconimg" src="OI_resource/customHud/icons/backArrow.png"></div>
+
+        <div id="addtoScene" class="addButton"><img id="iconimg" src="OI_resource/customHud/icons/add.png"></div>
+        <div id="bucketList"></div>
+    </div>
+</div>
+
+    <div id="Stats-output"></div>
+    
+    <script>
+        function init()
+        {
+            // 에셋 로딩, 객체 생성
+            var Assets = new AssetsLoader();
+            
+            // 씬 매니저 객체 생성
+            //var Manager = new SceneManager("user");
+            
+            // 프리뷰 씬 객체 생성
+            var PreviewScene = new PreviewSceneLoader(document.getElementById("preview"));
+            
+            // Asset Dictionary 생성
+            var Dictionary = new OI_AssetDic(Assets);
+            
+            // 메인룸 씬 객체 생성
+            var MainRoom = new MainSceneLoader(document.getElementById("content"));
+            
+            // Custom Camera
+            var MainCustomCam = new THREE.OddIdeaCamera( MainRoom.camera, MainRoom.renderer.domElement);
+            MainRoom.camera.lookAt(new THREE.Vector3(50,20,-50));
+            
+            // 이벤트 객체 생성 ---------------------------------------------*
+            var oiEvent = new OI_Event(document, Assets, PreviewScene, Dictionary, MainCustomCam, MainRoom);
+
+            var PrevCustomCam = new THREE.OddIdeaCamera( PreviewScene.camera, PreviewScene.renderer.domElement);
+       //     PreviewScene.camera.lookAt(new THREE.Vector3(25,5,-25));
+            
+            var stats = initStats();
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '30px';
+
+            // *-----------------------------------------------------------*
+            function onResize()
+            {
+                MainRoom.update();
+                PreviewScene.update();
+            }
+            
+            $("#asset")[0].onresize = onResize
+            
+            window.addEventListener('resize', onResize, false); 
+            
+            function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+            }
+//////////////////////////////////////////////////////////////////////////////////////////////
+         
+            //침대 종류 나열
+            var intaval=0;
+            
+            Promise.each(Assets.bedAsset,function(obj){
+                obj.position.set(intaval*40,5,-20);
+                obj.scale.set(10,10,10);
+                obj.name = "bed"+intaval;
+                MainRoom.scene.add(obj);
+                intaval++;
+            });
+            
+            
+            /* 회전 프레임 테스트
+            
+            Assets.bedAsset[5].then(function(obj){
+               obj.position.set(30,5,0);
+                obj.scale.set(10,10,10);
+                MainRoom.scene.add(obj);
+            });
+            
+         
+            */
+            
+//////////////////////////////////////////////////////////////////////////////////////////////
+            function renderScene()
+            {
+                MainRoom.renderer.render(MainRoom.scene, MainRoom.camera);
+                PreviewScene.renderer.render(PreviewScene.scene, PreviewScene.camera);
+                MainCustomCam.update();
+                PrevCustomCam.update();
+                PreviewScene.moveCamera();
+                
+                /* 회전 프레임 테스트
+                Assets.bedAsset[5].then(function(obj){
+                    obj.rotation.x+=0.2;
+
+                });
+                */
+                
+                stats.update();
+                
+                requestAnimationFrame(renderScene);
+            }
+            
+         renderScene();
+            
+        };
+        
+        window.onload = init;
+        
+    </script>
+</body>
+<script type="text/javascript" src="OI_resource/OI_js/OI_UI.js"></script>
+</html>
