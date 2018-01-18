@@ -17,7 +17,7 @@
     <script type="text/javascript" src="Jquery/jquery-ui.js"></script>
     
     <link rel = "stylesheet" type="text/css" href="HdStylesheet.css"> 
-
+    <link rel = "stylesheet" type="text/css" href="mypage.css"> 
     <!-- jquery ui 전용 css  !-->  
     <link rel="stylesheet" href="Jquery/jquery-ui.theme.css">
     <link rel="stylesheet" href="Jquery/jquery-ui.structure.css">
@@ -48,7 +48,7 @@
 
     <div id="homeMenue">
         <div id="iconLo1" class="icon"><img id="iconimg" src="OI_resource/customHud/icons/shopIcon.png"></div>
-        <div id="iconLo2" class="icon"></div>
+        <div id="iconLo2" class="icon"><img src="OI_resource/images/jewel_pink.png" width="50px" height="50px"></div>
         <div id="iconLo3" class="icon"></div>
         <div id="iconLo4" class="icon"></div>
         <div id="iconLo5" class="icon">save</div>
@@ -75,7 +75,39 @@
     </div>
 </div>
 
-    <div id="Stats-output"></div>
+<!-- 송식 추가 -->
+<div id="ww" style="position: absolute; top:100px; left:100px; width:80%; height:80%; display:none;">
+   <div id="mySpaceExit" class="exit">x</div>
+    <div id="profile">
+              
+        <a>프로필</a>
+               
+        <div id="profile_image">프사</div>
+        <p>아이디</p>
+                
+        <div class="">
+        <a id="logoutbutton" class="" style="cursor: pointer;">
+        <img src="OI_resource/images/logout.png" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+        </div>
+        <a>내용sdaasdasdaasdasdaadasdaasd1asdaasdasdaadasdaasdasdaasdasdaadasdaasd2asdaasdasdaadasdaasdasdaasdasdaad3asdaasdasdaasdasdaadasdaasda4sdaasdasdaadasddasdaasdasdaasdasdaad6asdaasdasdaasdasdaadasd7aasdasdaasdasdaadasdaasdasdaasdasdaadasdaasdasdaasdasdaadasdaasd8asdaasdasdaadasdaasdasdaasdasdaadasda9asdasdaasdasdaadasdaasdasdaasdasdaadasdaasdasdaasdasdaadasdaasdasdaasdasdaadasdaasdasdaasdasdaaaasdasdaasdasdaadasdaasdasdaasdasdaasdasda0777777777777777777777777777777777777777777777777777777888888888888888888888888888888888</a>
+    </div>
+            
+    <div id="contents">컨텐츠
+        <div id="showJoinroom">참여중인 방</div>
+                
+        <div id="showMyspaces">내가 꾸민 공간
+            <div style="background-color:red; width:100px; height:100px">1번방</div>
+            <div>2번방</div>
+            <div>3번방</div>
+            </div>
+    </div>
+            
+    <div id="social">친구목록
+            
+    </div>
+</div>
+   
+<div id="Stats-output"></div>
     
     <script>
         function init()

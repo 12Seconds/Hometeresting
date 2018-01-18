@@ -7,6 +7,7 @@
   });
 
   $("#assetExplore").draggable();
+  $("#ww").draggable();
 
 
 // 오른쪽 메뉴 여닫기-----------------------------------------
@@ -58,6 +59,25 @@ $(function(){
     
     $("#explorer_exit").on("click", function () {
          ExploreAppClose();
+     });
+})
+
+// 마이페이지
+
+$(function(){
+    function mySpaceAppClose(){
+        $( "#ww" ).hide( "fold", {}, "slow" );
+    }
+      function mySpaceAppToggle() {
+         $("#ww").toggle("fold");
+     };
+    
+     $("#iconLo2").on("click", function () {
+         mySpaceAppToggle();
+     });
+    
+    $("#mySpaceExit").on("click", function () {
+         mySpaceAppClose();
      });
 })
 
