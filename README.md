@@ -1,2 +1,0 @@
-# OIWebProject
-Korea Polytechnic University

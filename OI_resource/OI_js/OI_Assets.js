@@ -17,21 +17,10 @@ AssetsLoader = function()
         oi.bedAsset[i] = new Promise(function(resolve,reject){
             var loader = new THREE.ObjectLoader();
             loader.load("OI_resource/asset/furniture/bed/bed" + i + "/bed.json",function(obj){
-<<<<<<< HEAD
-<<<<<<< HEAD
-                obj.name = "bed";
-                obj.userData.name = "asset";
-=======
-=======
->>>>>>> dev_Bae
                 //obj.name = "";
                 obj.userData.name = "asset";
                 obj.userData.assetName = "bed";
                 //console.log(obj.userData);
-<<<<<<< HEAD
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
                 // Smooth Shading ---------------------------------------
                 var geo;
                 for(var j=0; j<obj.children.length; j++){
@@ -53,14 +42,7 @@ AssetsLoader = function()
         });
     }
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> dev_lih
-=======
-
->>>>>>> dev_Bae
     // Chair -------------
     oi.chairAsset = [];
     oi.chairCnt = oi.furnCnts[1];
@@ -147,15 +129,7 @@ AssetsLoader = function()
             });
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-            
-=======
     
->>>>>>> dev_lih
-=======
-    
->>>>>>> dev_Bae
     // Sofa -------------
     oi.sofaAsset = [];
     oi.sofaCnt = oi.furnCnts[4];
@@ -179,7 +153,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -242,13 +216,6 @@ AssetsLoader = function()
             });
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
     
     // Ornament ===============================================================
     oi.ornaNames = ["amp","guitar"];
@@ -282,15 +249,7 @@ AssetsLoader = function()
             });
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> dev_lih
-=======
-
->>>>>>> dev_Bae
     // Guitar -------------
     oi.guitarAsset = [];
     oi.guitarCnt = oi.ornaCnts[1];
@@ -319,15 +278,7 @@ AssetsLoader = function()
             });
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
- 
-=======
     
->>>>>>> dev_lih
-=======
-    
->>>>>>> dev_Bae
     // Structure ===============================================================
     oi.strucNames = ["door"];
     oi.strucCnts = [1];
@@ -360,14 +311,6 @@ AssetsLoader = function()
             });
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         
     
->>>>>>> dev_lih
-=======
-        
-    
->>>>>>> dev_Bae
 }

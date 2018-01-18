@@ -178,7 +178,8 @@ body {
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:hover {
     /*color: #BFA0ED 연한 색*/ 
-    color: #A566FF /* 조금 더 진한 보라색 */
+    color: #FC83D4 /* 조금 더 진한 보라색 */
+   
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link.active,
@@ -189,6 +190,7 @@ body {
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link.active:hover,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active:hover {
+  
     background-color: transparent
 }
 
@@ -220,7 +222,7 @@ body {
     }
     #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover,
     #mainNav .navbar-nav > li.nav-item > a.nav-link:hover {
-        color: #A566FF
+        color: #FC83D4
     }
 
     #mainNav.navbar-shrink { /* 스크롤 내렸을때? */
@@ -240,7 +242,7 @@ body {
     }
     #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover,
     #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover {
-        color: #BFA0ED
+        color: #FC83D4
     }
 }
 
@@ -385,13 +387,25 @@ header.masthead p {
 .btn-primary:focus,
 .btn-primary:hover {
     color: #fff;
-    background-color: #ee4b28!important
+    background-color: #FC83D4!important
 }
 
+
+.btn-light:active,
+.btn-light:focus,
 .btn-primary:active,
 .btn-primary:focus {
-    box-shadow: 0 0 0 .2rem rgba(240, 95, 64, .5)!important
+/*    box-shadow: 0 0 0 .2rem rgba(240, 95, 64, .5)!important*/
+    box-shadow: none;!important
 }
+
+.btn-light:active,
+.btn-light:focus,
+.btn-light:hover{
+    color:#fff;
+    background-color: #FC83D4!important
+}
+
 
 .fb_lo{
     position: relative;
@@ -407,5 +421,16 @@ header.masthead p {
 
 .g_lo span{
     display: block;
-    
+}
+
+#about_bg{
+    z-index: 1600;
+}
+
+#xbutton{
+  cursor: pointer;
+}
+
+#xbutton:hover{
+    background-color:#FFB2D9;
 }

@@ -9,3 +9,5 @@ https://www.iconfinder.com/icons/2639835/home_icon#size=128
 home pink #FC83D4
 home purple #A566FF
 
+login blue #045FB4
+logout yellow #FFCF40

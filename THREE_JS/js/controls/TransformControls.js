@@ -622,6 +622,14 @@
 		this.axis = null;
 
 		var scope = this;
+        
+        var prevPosition = null;
+        var prevRotation = null;
+        var prevScale = null;
+        
+        var afterPosition = null;
+        var afterRotation = null;
+        var afterScale = null;
 
 		var _mode = "translate";
 		var _dragging = false;
@@ -719,6 +727,18 @@
 			domElement.removeEventListener( "touchleave", onPointerUp );
 
 		};
+        
+        this.getPosChange = function(){
+            if(afterPosition!==null && prevPosition !== null){
+                console.log(afterPosition);
+                console.log(prevPosition);
+                var changePos = new THREE.Vector3(afterPosition.x-prevPosition.x,
+                                                 afterPosition.y-prevPosition.y,
+                                                 afterPosition.z-prevPosition.z);
+                console.log(changePos);
+                return changePos; 
+            }
+        };
 
 		this.attach = function ( object ) {
 
@@ -896,6 +916,10 @@
 				}
 
 			}
+            
+            prevPosition = scope.object.position;
+            prevScale = scope.object.scale;
+            prevRotation = scope.object.rotation;
 
 			_dragging = true;
 
@@ -1103,6 +1127,10 @@
 			scope.update();
 			scope.dispatchEvent( changeEvent );
 			scope.dispatchEvent( objectChangeEvent );
+            
+            afterPosition = scope.object.position;
+            afterScale = scope.object.scale;
+            afterRotation = scope.object.rotation;
 
 		}
 
@@ -1134,7 +1162,7 @@
 				onPointerHover( event );
 
 			}
-
+            
 		}
 
 		function intersectObjects( pointer, objects ) {
