@@ -1,8 +1,0 @@
-<<<<<<< HEAD
-- Jquery UI, 경량화 상태에서 로컬 save, load 구현된 상태
-=======
-﻿- Jquery UI, 경량화 상태에서 로컬 save, load 구현된 상태
-
-0.3 - index.html : 구글, 페이스북 로그인&로그아웃 구현된 상태, save point (2018.01.11)
-
->>>>>>> dev_Bae
