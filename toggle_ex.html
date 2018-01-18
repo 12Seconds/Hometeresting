@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Effects - Toggle Demo</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  .toggler {
+    width: 500px;
+    height: 200px;
+  }
+  #button {
+    padding: .5em 1em;
+    text-decoration: none;
+  }
+  #effect {
+    position: relative;
+    width: 240px;
+    height: 170px;
+    padding: 0.4em;
+  }
+  #effect h3 {
+    margin: 0;
+    padding: 0.4em;
+    text-align: center;
+  }
+  </style>
+    <script src="bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="Jquery/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    // run the currently selected effect
+    function runEffect() {
+
+      // Run the effect
+      $( "#effect" ).toggle( "drop", "", 500 );
+    };
+ 
+    // Set effect from select menu value
+    $( "#button" ).on( "click", function() {
+      runEffect();
+    });
+  } );
+  </script>
+</head>
+<body>
+ 
+<div class="toggler">
+  <div id="effect" class="ui-widget-content ui-corner-all">
+    <h3 class="ui-widget-header ui-corner-all">로그인</h3>
+    <p>
+      Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
+      <img src="OI_resource/images/login.png" width="25px" height="25px" style="vertical-align: middle">
+    </p>
+  </div>
+</div>
+ 
+<button id="button">Run Effect</button>
+
+ 
+</body>
+</html>
