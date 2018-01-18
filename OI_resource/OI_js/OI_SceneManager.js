@@ -65,7 +65,14 @@ SceneManager = function(userID)
         localStorage.setItem('myStorage', Info);
         
         // 테스트용 클리어 함수
+<<<<<<< HEAD
         oi.sceneReset(scene);
+=======
+       // oi.sceneReset(scene);
+        
+        
+        
+>>>>>>> dev_Bae
     }
 
     /* load Json */ // 테스트용, room type에 따른 씬 로드 수정 필요 

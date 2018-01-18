@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 @-webkit-keyframes hudCloseMove
         {
             0%  {
@@ -202,6 +203,8 @@
 
 body { margin:0; overflow:hidden; }
 =======
+=======
+>>>>>>> dev_Bae
 #header {
     background-color: #908886;
     width: 100%;
@@ -457,5 +460,9 @@ body { margin:0; overflow:hidden; }
 body {
     margin: 0;
     overflow: hidden;
+<<<<<<< HEAD
 }
 >>>>>>> dev_lih
+=======
+}
+>>>>>>> dev_Bae
