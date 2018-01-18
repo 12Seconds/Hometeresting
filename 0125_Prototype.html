@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title> - ProtoType01 - </title>
+    <script src="THREE_JS/three.js"></script>
+    <script src="OI_resource/OI_js/OI_Camera.js"></script>
+    <script src="THREE_JS/js/libs/stats.js"></script>
+    <script src="THREE_JS/js/libs/tween.js"></script>
+    <script src="THREE_JS/js/libs/bluebird.js"></script>
+    <script src="THREE_JS/js/libs/dat.gui.js"></script>
+      
+    <style>
+        body{
+        /*전체 페이지를 사용하기 위해 margin을 0으로, overflow를 hidden으로 설정*/
+        margin : 0;
+        overflow : hidden;
+        }
+        
+        #gui_container
+        {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+        }
+    </style>
+
+  </head>
+
+  <body>
+    <!-- 결과물을 표시할 Div요소 -->
+    <div id="Main-View"></div>
+    <div id="Stats-output"></div>
+    <div id="gui_container"></div>
+    <!-- Three.js를 구동하는 자바스크립트 코드 -->
+    <script>
+        
+        // 이벤트 리스너 등록 -----------------------------------------------------------
+        
+        window.addEventListener('resize', onResize, false); // 창의 크기가 변하면 onResize 함수가 호출됨.
+        
+        var scene1;
+        var camera1;
+        var renderer1;
+        
+        // Create also a custom scene for HUD.
+        var scene2;
+        var camera2;
+        var hudCanvas;
+        var canvasWidth;
+        var canvasHeight;
+        
+        // additive HUD
+        var scene3;
+        var camera3;
+        
+        // hud controls
+        var mainMenuFolding = false;
+        var AssetListOn = false;
+        
+        var assetTarget = [];
+    
+        var isModifying = false;
+        // asset controls
+        var isSelectedAsset = false;
+        var selectedAsset;
+        var assetX2D = window.innerWidth*2; // 2D 공간상의  X 좌표
+        var mode = "MenuMode";
+        
+        var assetx ;
+        assetx = Math.cos(30)*assetX2D;
+        var assety = window.innerHeight/4;
+        var assetz;
+        assetz = Math.cos(30)*assetX2D;
+
+        // window size
+        var windowWidth = window.innerWidth;
+        var windowHeight = window.innerHeight;
+        var windowWidth2 = window.innerWidth/2;
+        var windowHeight2 = window.innerHeight / 2;
+        
+        var mainMenuWidth = windowWidth2/2;
+        var mainMenuHeight = windowHeight2*2;
+        
+
+        
+       function onResize()
+        {
+            windowWidth = window.innerWidth;
+            windowHeight = window.innerHeight;
+            windowWidth2 = window.innerWidth/2;
+            windowHeight2 = window.innerHeight/2;
+  
+            camera1.aspect = windowWidth/windowHeight;
+            camera1.updateProjectionMatrix();
+          
+            camera2.aspect = (windowWidth/2)/(windowHeight/2);
+            camera2.updateProjectionMatrix();
+            
+            renderer1.setSize(windowWidth, windowHeight);
+        }
+
+        
+        function init()
+        { // 여기에 Three.js 코드를 추가
+        
+            var stats = initStats(); // 통계치 초기화
+          
+            scene1 = new THREE.Scene();
+            camera1 = new THREE.PerspectiveCamera(45, windowWidth/windowHeight, 1, 1000);
+            renderer1 = new THREE.WebGLRenderer({ clearAlpha: 1, alpha:true });
+            renderer1.setClearColor(0xEEEEEE);
+            renderer1.setSize(windowWidth,windowHeight);
+            renderer1.shadowMapEnabled = true; // 그림자가 필요함을 알림
+            renderer1.shadowMapType = THREE.PCFSoftShadowMap;
+            renderer1.autoClear = false;
+            
+       //     renderer1.setPixelRatio( window.devicePixelRatio );
+            document.getElementById("Main-View").appendChild(renderer1.domElement);
+            camera1.position.set(-100,50,20);
+             var CustomCam = new THREE.OddIdeaCamera( camera1,  renderer1.domElement );
+            camera1.lookAt(new THREE.Vector3(250,50,-250));
+            
+            
+            
+            
+            scene2 = new THREE.Scene();
+            // Create the camera and set the viewport to match the screen dimensions.
+            camera2 = new THREE.OrthographicCamera( - windowWidth / 2, windowWidth / 2, windowHeight / 2, - windowHeight / 2, 1, 10 );
+            camera2.position.z = 10;
+            
+            scene3 = new THREE.Scene();
+            camera3 = new THREE.OrthographicCamera( - windowWidth / 2, windowWidth / 2, windowHeight / 2, - windowHeight / 2, 0.1, 1500 );
+            camera3.position.z = 10;
+
+            // document 이벤트 리스너 --------------------------------------------------
+            
+            document.addEventListener('click', onDocumentMouseClick, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('keydown', onDocumentKeyDown, false);
+            document.addEventListener('keyup',onDocumentKeyUp, false);
+          
+// ===== 여기 아래부터는 나중에 재구성 =====
+            
+            // Dat.GUI
+            var controls;
+            
+            var gui = new dat.GUI({ autoPlace: false });
+            // gui.domElement.id = 'gui';
+            gui_container.appendChild(gui.domElement);
+            
+           
+      //     gui.add(controls,'Asset_Name');
+   //         gui.add(controls,'pos_x', -25, 25);
+    //        gui.add(controls,'pos_y', -25, 25);
+   //         gui.add(controls,'pos_z', -25, 25);
+            
+            
+            // 에셋 수정 함수 (위치, 크기, 회전)
+            var con = [];
+            var fol = [];
+            
+            // folder.remove(item);
+            
+            function assetModify(obj)
+            {
+                controls = new function ()
+                {
+                    this.Asset_Name = obj.name;
+                    this.pos_x = obj.position.x;
+                    this.pos_y = obj.position.y;
+                    this.pos_z = obj.position.z;
+                    
+                    this.scale_x = obj.scale.x;
+                    this.scale_y = obj.scale.y;
+                    this.scale_z = obj.scale.z
+                    
+                    this.rotation_x = obj.rotation.x;
+                    this.rotation_y = obj.rotation.y;
+                    this.rotation_z = obj.rotation.z;
+                }
+
+                con.push( gui.add(controls, 'Asset_Name'));
+                
+                //position
+                var changePos = gui.addFolder('Change Position');
+                var posX = changePos.add(controls,'pos_x',-250,250);
+                posX.onChange(function(e){ obj.position.x = controls.pos_x; });
+                
+                var posY = changePos.add(controls,'pos_y',0,200);
+                posY.onChange(function(e){ obj.position.y = controls.pos_y; });
+                
+                var posZ = changePos.add(controls,'pos_z',-250,250);
+                posZ.onChange(function(e){ obj.position.z = controls.pos_z; });
+                
+                //scale
+                var changeScale = gui.addFolder('Change Scale');
+                var scaleX = changeScale.add(controls,'scale_x',-100,100);
+                scaleX.onChange(function(e){ obj.scale.x = controls.scale_x; });
+                
+                var scaleY = changeScale.add(controls,'scale_y',-100,100);
+                scaleY.onChange(function(e){ obj.scale.y = controls.scale_y; });
+                
+                var scaleZ = changeScale.add(controls,'scale_z',-100,100);
+                scaleZ.onChange(function(e){ obj.scale.z = controls.scale_z; });
+                
+                //rotation
+                var changeRot = gui.addFolder('Change Rotation');
+                var RotX = changeRot.add(controls,'rotation_x',-180,180);
+                RotX.onChange(function(e){ obj.rotation.x = controls.rotation_x; });
+
+                var RotY = changeRot.add(controls,'rotation_y',-180,180);
+                RotY.onChange(function(e){ obj.rotation.y = controls.rotation_y; });
+
+                var RotZ = changeRot.add(controls,'rotation_z',-180,180);
+                RotZ.onChange(function(e){ obj.rotation.z = controls.rotation_z; });
+            }
+                                       
+            // 축 생성&추가 ---------------------------------------------------------------------
+            var axes = new THREE.AxisHelper(15);
+            scene1.add(axes);
+          
+            // 텍스쳐 로드 -----------------------------------------------------------------------
+           
+            var txr_Loader = new THREE.TextureLoader();
+            
+            var hudTexture = txr_Loader.load("OI_resource/customHud/nell.jpg");
+            var mainMenuTexture = txr_Loader.load("OI_resource/customHud/MainMenu.png");
+            var assetListTexture = txr_Loader.load("OI_resource/customHud/assetList.png");
+            var openMainArrow = txr_Loader.load("OI_resource/customHud/arrow-left-blue.jpg");
+            var closeMainArrow = txr_Loader.load("OI_resource/customHud/arrow-right-blue.jpg");
+            var shopIconTexture = txr_Loader.load("OI_resource/customHud/shopIcon.png");
+            var edit_modeTexture = txr_Loader.load("OI_resource/customHud/Edit_mode.png")
+            var menu_modeTexture = txr_Loader.load("OI_resource/customHud/Menu_mode.png")
+            
+            //벽지
+            var wallpaper01 = txr_Loader.load("OI_resource/asset/wallpaper/testpaper.jpg");
+            
+            var mat = new THREE.MeshPhongMaterial();
+            mat.map = hudTexture;
+            
+            // 에셋 로드 ------------------------------------------------------------------------
+            
+            var loader = new THREE.JSONLoader();
+
+            var monkeyAsset = new Promise(function(resolve,reject){
+  
+                loader.load("OI_resource/asset/Monkey.js", function(geo,mat){
+                    
+                    var material = new THREE.MultiMaterial(mat);
+                    material.side = THREE.DoubleSide;
+                    
+                    resolve(new THREE.Mesh(geo,material));
+                });
+            });
+            
+            monkeyAsset.then(function(obj){
+                obj.scale.set(assetx/9.5,assety/4,assetz/10);
+                obj.name = "monkey";
+                obj.userData.name = "asset";
+                obj.position.set(assetx*1.01,assety,-assetz);
+                scene3.add(obj);
+                obj.visible=false;
+            });    
+            
+            // 의자
+            var chairAsset = new Promise(function(resolve, reject){
+                
+                loader.load("OI_resource/asset/misc_chair01.js", function(geo, mat){
+                    
+                    var material = new THREE.MultiMaterial(mat);
+                    material.side = THREE.DoubleSide;
+                    resolve(new THREE.Mesh(geo, material));
+                });
+            });
+            chairAsset.then(function(obj){
+                obj.scale.set(assetx/9.5,assety/4,assetz/10);
+                obj.name = "chair";
+                obj.userData.name = "asset";
+                obj.position.set(assetx*1.42,assety*0.8,-assetz);
+                scene3.add(obj);
+                obj.visible=false;
+                
+            });  
+            
+                
+            // 공간 생성&추가 --------------------------------------------------------------------
+          
+              
+            var wallGeometry = new THREE.BoxGeometry(1, 1, 1);
+            var wallMaterial = new THREE.MeshLambertMaterial({map:wallpaper01, side:THREE.DoubleSide});
+
+            var floor = new THREE.Mesh(wallGeometry, wallMaterial);
+            floor.scale.set(500,0.2,500);
+            floor.castShadow = true;
+            scene1.add(floor);
+          
+            
+            var ceiling = new THREE.Mesh(wallGeometry, wallMaterial);
+       //   ceiling.rotation.x = 0.5 * -Math.PI;
+            ceiling.scale.set(500,0.2,500);
+            ceiling.position.y = 200;
+            scene1.add(ceiling);
+            
+           // var planeGeometry = new THREE.PlaneGeometry(50, 50);
+        //    var planeMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
+        //    planeMaterial.side = THREE.DoubleSide;
+            
+            var wall_01 = new THREE.Mesh(wallGeometry, wallMaterial);
+            wall_01.scale.set(500,200,0.2);
+            wall_01.position.z = -250;
+            wall_01.position.y = 100;
+            scene1.add(wall_01);
+            
+            var wall_02 = new THREE.Mesh(wallGeometry, wallMaterial);
+            wall_02.scale.set(0.2,200,500);
+            wall_02.position.x = 250;
+            wall_02.position.y = 100;
+            scene1.add(wall_02);
+          
+        //    camera1.lookAt(new THREE.Vector3(250,50,-250));
+            // 광원 추가 ------------------------------------------------------------------------
+          
+            var spotLight = new THREE.SpotLight(0xffffff);
+            spotLight.position.set(0, 50, 0);
+            spotLight.castShadow = true;
+            spotLight.intensity = 1.5;
+          //scene1.add(spotLight);
+            
+            var PointLight = new THREE.PointLight(0xffffff);
+            PointLight.position.set(0,100,0);
+            PointLight.intensity = 1.5;
+            scene1.add(PointLight);
+            
+            var dirLight = new THREE.DirectionalLight();
+            dirLight.position.z = 10;
+            scene3.add(dirLight);
+          
+             // hud test ----------------------------------------------------------------------
+
+            hudCanvas = document.createElement('canvas');
+  
+              // Again, set dimensions to fit the screen.
+            canvasWidth = hudCanvas.width;
+            canvasHeight = hudCanvas.height;
+            
+            
+            /* 
+            var hudMaterial = new THREE.SpriteMaterial({
+                map:hudTexture,
+                transparent:true,
+                opacity:0.9,
+                blending:THREE.AdditiveBlending,
+                depthTest:false
+            });
+            var hudMesh = new THREE.Sprite(hudMaterial);
+            hudMesh.scale.set(10,10,10);
+            hudMesh.position.set(100,0,0);
+            scene2.add(hudMesh);
+            */
+            // custom HUD ----------------------------------------------------------------------
+            
+                // HUD Position reference ----------------------------------------------
+                /*
+                
+                    spriteTL.position.set( - width + imageWidth,   height - imageHeight, 1 ); // top left
+                
+                    mainMenuMesh.scale.set(mainMenuWidth,mainMenuHeight,1);
+                    mainMenuMesh.position.set( windowWidth2 - mainMenuWidth*0.5,   
+                                          windowHeight2 - mainMenuHeight*0.5, 1 ); // top right
+                                          
+                    spriteBL.position.set( - width + imageWidth, - height + imageHeight, 1 ); // bottom left
+                
+                    spriteBR.position.set(   width - imageWidth, - height + imageHeight, 1 ); // bottom right
+                
+                    spriteC.position.set( 0, 0, 1 ); // center
+                
+                */
+                // ---------------------------------------------------------------------
+              
+            // main Menu Open Arrow
+            var mainOpenGeometry = new THREE.CubeGeometry(60,100,10);
+            var mainOpenMaterial = new THREE.MeshBasicMaterial({
+                map:openMainArrow,
+                transparent:true,
+                blending:THREE.AdditiveBlending
+            });
+            var mainOpenMesh = new THREE.Mesh(mainOpenGeometry,mainOpenMaterial);
+            mainOpenMesh.scale.set(mainMenuWidth*0.002, mainMenuHeight*0.001,1);
+            mainOpenMesh.position.set(windowWidth/2.05,0,0);
+            mainOpenMesh.name = "mainOpenMesh";
+        
+            // main Menu Close Arrow
+            var mainCloseGeometry = new THREE.CubeGeometry(60,100,10);
+            var mainCloseMaterial = new THREE.MeshBasicMaterial({
+                map:closeMainArrow,
+                transparent:true,
+                opacity:0.5
+            });
+            var mainCloseMesh = new THREE.Mesh(mainCloseGeometry,mainCloseMaterial);
+            mainCloseMesh.scale.set(mainMenuWidth*0.002, mainMenuHeight*0.001,1);
+            mainCloseMesh.position.set(windowWidth/3.8,0,0);
+            mainCloseMesh.name = "mainCloseMesh";
+            
+            // main Menu
+            var mainMenuMaterial = new THREE.SpriteMaterial({
+                map:mainMenuTexture,
+                transparent:true,
+                opacity:0.5
+            });
+
+            
+            var mainMenuMesh = new THREE.Sprite(mainMenuMaterial);
+            
+            mainMenuMesh.scale.set(mainMenuWidth,mainMenuHeight,1);
+            //mainMenuMesh.position.set( windowWidth2 - mainMenuWidth*0.5,   
+                                      // windowHeight2 - mainMenuHeight*0.5, 1 ); // top right
+            
+            // AssetList
+            var AssetListMaterial = new THREE.SpriteMaterial({
+                map:assetListTexture,
+                transparent:true,
+                opacity:0.5
+            });
+            var AssetListMesh = new THREE.Sprite(AssetListMaterial);
+            
+            AssetListMesh.scale.set(mainMenuWidth,mainMenuHeight,1);
+            AssetListMesh.position.set( windowWidth2 - mainMenuWidth*0.5,   
+                                       windowHeight2 - mainMenuHeight*0.5, 1 ); // top right       
+            
+            AssetListMesh.visible=false;
+            
+            // Shop icon
+            var shopIconGeometry = new THREE.CircleGeometry(mainMenuWidth/9, 
+                                                            50, Math.PI*2, Math.PI*2);
+            var shopIconMaterial = new THREE.MeshBasicMaterial({
+                map:shopIconTexture,
+                side:THREE.DoubleSide,
+                transparent:true,
+                opacity:0.8,
+                depthTest:false,
+            });
+         
+            var shopIconMesh = new THREE.Mesh(shopIconGeometry, shopIconMaterial);
+            shopIconMesh.position.y = mainMenuHeight*0.4;
+            
+            shopIconMesh.name = "shopIconMesh";
+          
+            // 편집 모드
+            var edit_Mode_Geometry = new THREE.CubeGeometry(mainMenuWidth/2.5,windowHeight2/5,10);
+            var edit_Mode_Material = new THREE.MeshBasicMaterial({
+                map:edit_modeTexture,
+                transparent:true,
+                opacity:0.6
+              //blending:THREE.AdditiveBlending
+            });
+            var edit_Mode = new THREE.Mesh(edit_Mode_Geometry,edit_Mode_Material);
+            edit_Mode.position.set(-windowWidth2*0.88,-windowHeight*0.43,0);
+            edit_Mode.name = "edit_Mode";
+            scene3.add(edit_Mode);
+            edit_Mode.visible = false;
+            
+            // 메뉴 모드
+            var menu_Mode_Geometry = new THREE.CubeGeometry(mainMenuWidth/2.5,windowHeight2/5,10);
+            var menu_Mode_Material = new THREE.MeshBasicMaterial({
+                map:menu_modeTexture,
+                transparent:true,
+                opacity:0.6
+             //blending:THREE.AdditiveBlending
+            });
+            
+            var menu_Mode = new THREE.Mesh(menu_Mode_Geometry,menu_Mode_Material);
+            menu_Mode.position.set(-windowWidth2*0.88,-windowHeight*0.43,0);
+            menu_Mode.name = "menu_Mode";
+            scene3.add(menu_Mode);
+
+            // hud groupping
+            var scene2Group = new THREE.Group();
+            scene2Group.add(mainCloseMesh,mainMenuMesh,AssetListMesh);
+            
+            var scene3Group = new THREE.Group();
+            scene3Group.add(mainOpenMesh,shopIconMesh,menu_Mode);
+            
+            scene2.add(scene2Group);
+            scene3.add(scene3Group);
+            
+            // Mouse Event Target Push -----------------------------------------------------------------
+            
+            var hudObject = []; // 마우스 이벤트 타겟 오브젝트
+            hudObject.push(mainCloseMesh);
+            for(var i=0; i<scene3Group.children.length; i++){
+                if(scene3Group.children[i] instanceof THREE.Mesh)
+                    hudObject.push(scene3Group.children[i]);
+            }
+            
+            monkeyAsset.then(function(obj){
+                hudObject.push(obj);
+            });    
+            chairAsset.then(function(obj){
+            hudObject.push(obj);
+            });    
+        
+  
+            // hud Event Listener ----------------------------------------------------------------------
+            
+            function onDocumentMouseClick(event) {
+                // https://github.com/mrdoob/three.js/issues/5587#event-189998644
+                switch ( event.button ){
+                    case 0: // left mouse down
+                        var mouseVector = new THREE.Vector3();
+                        var raycaster = new THREE.Raycaster();
+                        var mouseDir = new THREE.Vector3();
+                        
+                        mouseVector.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, - 1 ); // z = - 1 important!
+
+                        mouseVector.unproject( camera3 );
+
+                        mouseDir.set( 0, 0, - 1 ).transformDirection( camera3.matrixWorld );
+
+                        raycaster.set( mouseVector, mouseDir );
+                          
+                        var intersects = raycaster.intersectObjects(hudObject, false);
+            
+                        if (intersects.length > 0) {
+                            //alert(intersects[0].object.name);
+                            if(intersects[0].object.userData.name == "asset"){
+                                changeMode("EditMode");
+                                mode = "EditMode";
+                                isSelectedAsset = true;
+                                selectedAsset = intersects[0].object.name;
+                                
+                            }      
+                            else{
+                                MenuAct(intersects[0]);
+                            }
+                        }  
+                        else{
+                      //      alert("Not Object");
+                        }
+                }
+            }
+            
+            // change Mode ------------------------------------------------------------------------------
+            
+            function changeMode(mode){
+                
+                if(mode=="MenuMode"){ // 허드 선택 하는 메뉴 모드
+                    menu_Mode.visible = true;
+                    edit_Mode.visible = false;
+                    isModifying = false;
+                    document.removeEventListener('click',onAssetMouseClick,false);
+                    document.addEventListener('click',onDocumentMouseClick,false);
+                }
+                else{ // 에셋을 편집 할 수 있는 에딧 모드
+                    menu_Mode.visible = false;
+                    edit_Mode.visible = true;
+                    isModifying = true;
+                    document.removeEventListener('click',onDocumentMouseClick,false);
+                    document.addEventListener('click', onAssetMouseClick, false);
+                }
+                
+            }
+            
+            function onDocumentKeyDown(event){
+                switch(event.keyCode){
+                        
+                }
+            }
+            
+            function onDocumentKeyUp(event){
+                    switch(event.keyCode){
+                        case 27: // ESC Key
+                            changeMode("MenuMode");
+                            mode = "MenuMode";
+                            isSelectedAsset = false;
+                            conDelete();
+                            if(isModifying)
+                            {
+                                isModifying = false;
+                            }
+
+                            for(var i=0; i<scene1.children.length; i++){
+                                if(scene1.children[i].getObjectByName("traceAsset"))
+                                    scene1.remove(scene1.children[i]);
+                            }
+
+                            break;
+                        
+                    case 113: // f2
+                        if(mode == "MenuMode"){
+                            mode = "EditMode";
+                            changeMode("EditMode");        
+                        }
+                            
+                        else{
+                            mode = "MenuMode";
+                            changeMode("MenuMode");
+                            isSelectedAsset = false;
+                            for(var i=0; i<scene1.children.length; i++){
+                                if(scene1.children[i].getObjectByName("traceAsset"))
+                                    scene1.remove(scene1.children[i]);
+                            }
+                            
+                            conDelete();  
+                        }
+                        break;
+                }
+            }
+            
+            function conDelete()
+            {
+                gui.removeFolder("Change Position");
+                gui.removeFolder("Change Scale");
+                gui.removeFolder("Change Rotation");
+                 for(var i=0; i<con.length;i++)
+                {
+                    gui.remove(con[i]); 
+                }
+                 con = [];
+            }
+            // asset Act Function ---------------------------------------------------------------------
+            
+     //       function assetTargetPush(){
+                for(var i=0; i<scene1.children.length; i++)
+                {
+                    if(scene1.children[i] instanceof THREE.Mesh)
+                        assetTarget.push(scene1.children[i]);
+                }
+    //        }
+     //       assetTargetPush();
+            
+            function onDocumentMouseMove(event) {
+                
+                var mouseVector = new THREE.Vector3();
+                var raycaster = new THREE.Raycaster();
+                        
+                mouseVector.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 ); // z = 0.5 important!
+
+                mouseVector.unproject( camera1 );
+
+                raycaster.set( camera1.position, mouseVector.sub( camera1.position ).normalize() );
+
+                var intersects = raycaster.intersectObjects(assetTarget, false);
+
+                if (intersects.length > 0) {
+                    if(isSelectedAsset){
+                        assetAct(intersects[0].point);
+                    }
+                }
+            }
+            
+            function assetAct(points){ // 에셋이 마우스 따라다니는 함수
+                if(isSelectedAsset){
+                    switch(selectedAsset)
+                    {
+                        case "monkey":
+                        //alert("Monkey Test");
+                        monkeyAsset.then(function(obj){
+                            var material = obj.material.clone();
+                            var traceMonkey = new THREE.Mesh(obj.geometry, material);
+                            traceMonkey.scale.x = obj.scale.x/17;
+                            traceMonkey.scale.y = obj.scale.y/17;
+                            traceMonkey.scale.z = obj.scale.z/17;
+                            traceMonkey.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+                            traceMonkey.name = "traceAsset";
+                            scene1.add(traceMonkey);
+                        });
+                        break;
+                            
+                        case "chair":
+                        //alert("Monkey Test");
+                        chairAsset.then(function(obj){
+                            var material = obj.material.clone();
+                            var traceChair = new THREE.Mesh(obj.geometry, material);
+                            traceChair.scale.x = obj.scale.x/17;
+                            traceChair.scale.y = obj.scale.y/17;
+                            traceChair.scale.z = obj.scale.z/17;
+                            traceChair.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+                            traceChair.name = "traceAsset";
+                            scene1.add(traceChair);
+                        });
+                        break;  
+                    }   
+                    var assetRemove = [];
+                        scene1.traverse(function(e){
+                            if(e.getObjectByName("traceAsset"))
+                                assetRemove.push(e);
+                        });
+                        assetRemove.forEach(function(e){
+                            scene1.remove(e);
+                        });
+                }
+
+            }
+            
+            function onAssetMouseClick(event) { // 에셋 배치 마우스 클릭 이벤트 리스너
+                // https://github.com/mrdoob/three.js/issues/5587#event-189998644
+                switch ( event.button ){
+                    case 0: // left mouse down
+                        var mouseVector = new THREE.Vector3();
+                        var raycaster = new THREE.Raycaster();
+                        
+                        mouseVector.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 ); // z = 0.5 important!
+
+                        mouseVector.unproject( camera1 );
+
+                        raycaster.set( camera1.position, mouseVector.sub( camera1.position ).normalize() );
+                          
+                        var intersects = raycaster.intersectObjects(assetTarget, false);
+            
+                        if (intersects.length > 0) {
+                            if(isSelectedAsset){
+                                //alert("Asset Batch!");
+                                assetBatch(intersects[0].point);
+                            }
+                            else if(intersects[0].object.name == "newAsset")
+                            {
+                                isModifying = true;
+                                //alert(intersects[0].object.name+"의 위치를 변경합니다.");
+                                conDelete();
+                               // assetModify(intersects[0]); // 에셋 수정 함수 호출
+                                 // 함수 내에서 그 객체의 정보를 controls의 변수와 이어줌
+                                assetModify(intersects[0].object);
+                            }
+                                
+                        }
+
+                        break;
+                }
+            }
+            
+            function assetBatch(points){ // 에셋 배치 함수
+                
+                switch(selectedAsset){
+                    
+                    case "monkey":
+                        monkeyAsset.then(function(obj){
+                            var material = obj.material.clone();
+                            var newMonkey = new THREE.Mesh(obj.geometry, material);
+                            newMonkey.scale.x = obj.scale.x/17;
+                            newMonkey.scale.y = obj.scale.y/17;
+                            newMonkey.scale.z = obj.scale.z/17;
+                            newMonkey.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+                            newMonkey.name = "newAsset";
+                            assetTarget.push(newMonkey);
+                            scene1.add(newMonkey);
+                        }); 
+                        break;
+                        
+                    case "chair":
+                        chairAsset.then(function(obj){
+                            var material = obj.material.clone();
+                            var newChair = new THREE.Mesh(obj.geometry, material);
+                            newChair.scale.x = obj.scale.x/17;
+                            newChair.scale.y = obj.scale.y/17;
+                            newChair.scale.z = obj.scale.z/17;
+                            newChair.position.set(points.x-1.5, points.y+1.5, points.z+1.5); 
+                            newChair.name = "newAsset";
+                            assetTarget.push(newChair);
+                            scene1.add(newChair);
+                        }); 
+                        break;
+                }
+                
+                for(var i=0; i<scene1.children.length; i++){
+                    if(scene1.children[i].getObjectByName("traceAsset"))
+                        scene1.remove(scene1.children[i]);
+                }
+                
+                isSelectedAsset = false;
+                changeMode("MenuMode");
+                mode = "MenuMode";
+            }
+            
+            // Menu Act Function ----------------------------------------------------------------------
+            
+            function MenuAct(obj)
+            { 
+                var openSrc = {pos:mainOpenMesh.position.x};
+                var closeSrc = {pos:mainCloseMesh.position.x};
+
+                var name = obj.object.name;
+
+                switch(name){
+                        
+                        // 마우스 클릭으로 메뉴모드에서 에딧 모드로 변환
+                    //case "menu_Mode":
+                       // changeMode("EditMode");
+                       // break;
+                        
+                    case "mainOpenMesh" : 
+                        if(!mainMenuFolding){
+                            TWEEN.removeAll();  
+                            var openTween = new TWEEN.Tween(openSrc)
+                                                    .to(closeSrc,800)
+                                                    .easing(TWEEN.Easing.Bounce.Out)
+                                                    .onUpdate(function(){
+                                                        mainCloseMesh.position.x = openSrc.pos;
+                                                        mainMenuMesh.position.x = openSrc.pos*1.42;
+                                                        shopIconMesh.position.x = openSrc.pos*1.15;
+                                                    })
+                                                    .start();
+              
+                            mainMenuFolding = true;
+                        }
+                            
+                        break;
+                    case "mainCloseMesh" :
+                        if(mainMenuFolding){
+                            TWEEN.removeAll();
+                            var closeTween = new TWEEN.Tween(closeSrc)
+                                                    .to(openSrc,1200)
+                                                    .easing(TWEEN.Easing.Elastic.Out)
+                                                    .onUpdate(function(){
+                                                        mainMenuMesh.visible = true;
+                                                        shopIconMesh.visible = true;
+                                                        
+                                                        mainOpenMesh.position.x = closeSrc.pos;
+                                                        mainMenuMesh.position.x = closeSrc.pos*1.42;
+                                                        shopIconMesh.position.x = closeSrc.pos*1.15;
+                                                    })
+                                                    .start();
+                                                    
+                            mainMenuFolding = false;
+                        }
+                        
+                        break;
+                    case "shopIconMesh" :
+                        if(!AssetListOn)
+                            AssetListOn = true;
+                        break;
+                }
+                        
+            }
+            
+            // 3D to 2D func -------------------------------------------------------------------
+            function toScreenPosition(obj, camera)
+            {
+                var vector = new THREE.Vector3();
+
+                var widthHalf = 0.5*renderer.context.canvas.width;
+                var heightHalf = 0.5*renderer.context.canvas.height;
+
+                obj.updateMatrixWorld();
+                vector.setFromMatrixPosition(obj.matrixWorld);
+                vector.project(camera);
+
+                vector.x = ( vector.x * widthHalf ) + widthHalf;
+                vector.y = - ( vector.y * heightHalf ) + heightHalf;
+
+                return {
+                    x: vector.x,
+                    y: vector.y
+                };
+            };
+            
+            
+            // render --------------------------------------------------------------------------
+            
+            function renderScene()
+            {
+                stats.update();
+                CustomCam.update();
+
+                renderer1.clear();
+                renderer1.render(scene1, camera1);
+                renderer1.clearDepth();
+                
+                renderer1.render(scene2, camera2);
+
+                renderer1.render(scene3, camera3);
+                
+                if(mainMenuFolding)
+                {
+                    mainMenuMesh.visible=true;
+                    mainCloseMesh.visible=true;
+                    mainOpenMesh.visible=false;
+                    shopIconMesh.visible=true;
+                    AssetListMesh.visible=false;
+                }
+                else if(!mainMenuFolding)
+                {
+                    mainMenuMesh.visible=false;
+                    mainCloseMesh.visible=false;
+                    mainOpenMesh.visible=true;
+                    shopIconMesh.visible=false;
+                    AssetListMesh.visible=false;
+                    AssetListOn=false;
+
+                }
+                if(AssetListOn)
+                {
+                    AssetListMesh.visible=true;
+                    mainMenuMesh.visible=false;
+                    shopIconMesh.visible=false;
+                    monkeyAsset.then(function(obj){ obj.visible=true; });
+                    chairAsset.then(function(obj){ obj.visible=true; });
+                }
+                else if(!AssetListOn)
+                {
+                    AssetListMesh.visible=false;
+              //    monkeyAsset.visible=false;
+                    monkeyAsset.then(function(obj){ obj.visible=false; });
+                    chairAsset.then(function(obj){ obj.visible=false; }); 
+                }
+                
+                TWEEN.update();
+                
+                requestAnimationFrame(renderScene);
+             
+            }
+          
+            function initStats()    
+            {
+                var stats = new Stats();
+                stats.setMode(0);
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.left = '270px';
+                stats.domElement.style.top = '10px';
+                document.getElementById("Stats-output").appendChild(stats.domElement);
+                return stats;
+            }
+            
+            dat.GUI.prototype.removeFolder = function(name) {
+                var folder = this.__folders[name];
+                if (!folder) {
+                    return;
+                }
+                folder.close();
+                this.__ul.removeChild(folder.domElement.parentNode);
+                delete this.__folders[name];
+                this.onResize();
+            }
+            
+            renderScene();
+        };
+   
+        window.onload = init; // HTML문서의 로딩이 끝났을 때 함수를 호출
+        
+    </script>
+      
+  </body>
+</html>
