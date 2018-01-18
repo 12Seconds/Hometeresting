@@ -6,6 +6,7 @@
       containment : "#content"
   });
 
+  $("#assetExplore").draggable();
 
 
 // 오른쪽 메뉴 여닫기-----------------------------------------
@@ -38,6 +39,25 @@ $(function(){
     
     $("#assetExit").on("click", function () {
          assetAppClose();
+     });
+})
+
+// 에셋 익스플로러
+
+$(function(){
+    function ExploreAppClose(){
+        $( "#assetExplore" ).hide( "fold", {}, "slow" );
+    }
+      function ExploreAppToggle() {
+         $("#assetExplore").toggle("fold");
+     };
+    
+     $("#iconLo3").on("click", function () {
+         ExploreAppToggle();
+     });
+    
+    $("#explorer_exit").on("click", function () {
+         ExploreAppClose();
      });
 })
 

@@ -10,20 +10,10 @@
     <script type="text/javascript" src="OI_resource/OI_js/OI_Assets.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_Event.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_AssetDic.js"></script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
-    <link rel = "stylesheet" type="text/css" href="HdStylesheet.css"> 
-
-=======
-    <script type="text/javascript" src="OI_resource/OI_js/OI_SceneManager.js"></script>
-    <script type="text/javascript" src="Jquery/jquery-3.2.1.js"></script>
-=======
     <script type="text/javascript" src="OI_resource/OI_js/OI_SceneManager.js"></script>
     
     <!--script type="text/javascript" src="Jquery/jquery-3.2.1.js"></script-->
     <script type="text/javascript" src="Jquery/jquery.js"></script>
->>>>>>> dev_Bae
     <script type="text/javascript" src="Jquery/jquery-ui.js"></script>
     
     <link rel = "stylesheet" type="text/css" href="HdStylesheet.css"> 
@@ -32,61 +22,27 @@
     <link rel="stylesheet" href="Jquery/jquery-ui.theme.css">
     <link rel="stylesheet" href="Jquery/jquery-ui.structure.css">
 
-<<<<<<< HEAD
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
 </head>
 
 <body>
 
+    <ul style="" id="assetExplore">    
+        <div id="explorer_exit" class=""></div>
+    </ul>
+
 <div id="header">
-<<<<<<< HEAD
-<<<<<<< HEAD
-    ID : Developer 
-    <img src ="OI_resource/customHud/icons/down/southkorea(2).png" width="25px" height="25px" style="vertical-align: middle">
+    <a class="brand" href="index.html">HOMETERESTING</a>
+    <!--img src="OI_resource/customHud/icons/down/southkorea(2).png" width="25px" height="25px" style="vertical-align: middle"-->
+    <div class=header-menu>
+        <a id="glogoutbutton" class="logouta" style="cursor: pointer;display:none">
+        <img src="OI_resource/images/logout.png" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+    </div>
 </div>
 <div id="content"></div>
-<div id="button"></div>  
-<div id="sideinfo">
-      <div id ="iconBackLo" class ="iconBack"></div>
-    <div id ="homeMenue">
-        <div id ="iconLo1" class="icon" ><br></div>
-        <div id ="iconLo2" class="icon" ><br></div>
-        <div id ="iconLo3" class="icon" ><br></div>
-        <div id ="iconLo4" class="icon" ><br></div>
-        <div id ="iconLo5" class="icon" ><br></div>
-        <div id ="iconLo6" class="icon" ><br></div>
-    </div>
-    
-    <div id="assetCategory">
-        <div id ="categoryLo1" class="category"><br></div>
-        <div id ="categoryLo2" class="category"><br></div>
-        <div id ="categoryLo3" class="category"><br></div>
-        <div id ="categoryLo4" class="category"><br><br><br>--comming<br>--soon</div>
-        <div id="searchSpace">검색기능</div>
-    </div>
-    
-    <div id="assetList">
-        <div id="preview"></div>
-        <div id="backArrow"></div>
-       
-        <div id="addtoScene" class="addButton"></div>
-        <div id="bucketList"></div>
-    </div>
-    
+<div id="button" class="buttonLo">
+    <!--img id="imgButtonLo" src="OI_resource/customHud/icons/menu.png"-->
+    <img id="imgButtonLo" src="OI_resource/images/jewel_purple.png">
 </div>
-
-    <div id="Stats-output"></div>
-
-=======
-=======
->>>>>>> dev_Bae
-    ID : Developer
-    <img src="OI_resource/customHud/icons/down/southkorea(2).png" width="25px" height="25px" style="vertical-align: middle">
-</div>
-<div id="content"></div>
-<div id="button" class="buttonLo"><img id="imgButtonLo" src="OI_resource/customHud/icons/menu.png" ></div>
 
 <div id="sideinfo">
 
@@ -121,28 +77,15 @@
 
     <div id="Stats-output"></div>
     
-<<<<<<< HEAD
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
     <script>
         function init()
         {
             // 에셋 로딩, 객체 생성
             var Assets = new AssetsLoader();
             
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             // 씬 매니저 객체 생성
             //var Manager = new SceneManager("user");
             
->>>>>>> dev_lih
-=======
-            // 씬 매니저 객체 생성
-            //var Manager = new SceneManager("user");
-            
->>>>>>> dev_Bae
             // 프리뷰 씬 객체 생성
             var PreviewScene = new PreviewSceneLoader(document.getElementById("preview"));
             
@@ -161,18 +104,11 @@
 
             var PrevCustomCam = new THREE.OddIdeaCamera( PreviewScene.camera, PreviewScene.renderer.domElement);
        //     PreviewScene.camera.lookAt(new THREE.Vector3(25,5,-25));
-<<<<<<< HEAD
-<<<<<<< HEAD
-          
-=======
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
             
             var stats = initStats();
             stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '0px';
-            stats.domElement.style.top = '30px';
+            stats.domElement.style.left = '10px';
+            stats.domElement.style.top = '100px';
 
             // *-----------------------------------------------------------*
             function onResize()
@@ -180,18 +116,9 @@
                 MainRoom.update();
                 PreviewScene.update();
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             
             $("#asset")[0].onresize = onResize
             
->>>>>>> dev_lih
-=======
-            
-            $("#asset")[0].onresize = onResize
-            
->>>>>>> dev_Bae
             window.addEventListener('resize', onResize, false); 
             
             function initStats() {
@@ -211,22 +138,6 @@
             }
 //////////////////////////////////////////////////////////////////////////////////////////////
          
-<<<<<<< HEAD
-<<<<<<< HEAD
-            /* 침대 종류 나열
-            var chi=0;
-            
-            Promise.each(Assets.bedAsset,function(obj){
-                obj.position.set(chi*40,5,-20);
-            
-                obj.scale.set(10,10,10);
-                MainRoom.scene.add(obj);
-                chi++;
-            });
-            */
-=======
-=======
->>>>>>> dev_Bae
             //침대 종류 나열
             var intaval=0;
             
@@ -238,10 +149,6 @@
                 intaval++;
             });
             
-<<<<<<< HEAD
->>>>>>> dev_lih
-=======
->>>>>>> dev_Bae
             
             /* 회전 프레임 테스트
             
@@ -262,45 +169,26 @@
                 MainCustomCam.update();
                 PrevCustomCam.update();
                 PreviewScene.moveCamera();
-                
+              //  oiEvent.exploreUpdate();
+
                 /* 회전 프레임 테스트
                 Assets.bedAsset[5].then(function(obj){
                     obj.rotation.x+=0.2;
 
                 });
-<<<<<<< HEAD
-<<<<<<< HEAD
-                
                 */
                 
-                
-=======
-                */
-                
->>>>>>> dev_lih
-=======
-                */
-                
->>>>>>> dev_Bae
                 stats.update();
                 
                 requestAnimationFrame(renderScene);
             }
             
-         renderScene();
-            
+            renderScene();
         };
         
         window.onload = init;
         
     </script>
 </body>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 <script type="text/javascript" src="OI_resource/OI_js/OI_UI.js"></script>
->>>>>>> dev_lih
-=======
-<script type="text/javascript" src="OI_resource/OI_js/OI_UI.js"></script>
->>>>>>> dev_Bae
 </html>
