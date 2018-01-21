@@ -60,13 +60,34 @@
         // Ctrl+c event 변수
         oi.isCopy = false;
         oi.copyAsset = null;
+        oi.g_copyAsset = [];
         oi.copyCnt = 0;
         
-        /*
         // G key ---> group 변수
         oi.groupAsset = [];
         oi.isGroup = false;
-        */
+        oi.gKeyPress = false;
+        
+        // 에셋의 Outline을 위한 변수
+        oi.composer = new THREE.EffectComposer(oi.mainRoom.renderer);
+        oi.renderPass = new THREE.RenderPass( oi.mainRoom.scene, oi.mainRoom.camera );
+        oi.composer.addPass( oi.renderPass );
+        oi.outlinePass = new THREE.OutlinePass( new THREE.Vector2( oi.mainRoom.windowWidth, oi.mainRoom.windowHeight ), 
+                                               oi.mainRoom.scene, oi.mainRoom.camera );
+        oi.composer.addPass( oi.outlinePass );
+        
+        oi.effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+        oi.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / oi.mainRoom.windowWidth, 1 / oi.mainRoom.windowHeight );
+        oi.effectFXAA.renderToScreen = true;
+        oi.composer.addPass( oi.effectFXAA );
+        
+        oi.outlinePass.edgeStrength = 3;
+        oi.outlinePass.edgeGlow = 1;
+        oi.outlinePass.edgeThickness = 2;
+        oi.outlinePass.pulsePeriod = 3;
+        oi.outlinePass.visibleEdgeColor.set('#a02727');
+        oi.outlinePass.hiddenEdgeColor.set('#ede8e6');
+
 
         // 공통 div Event =====================================================================
         
@@ -176,8 +197,42 @@
                     oi.selectedAsset = intersects[0].object.parent.parent;
                     if (oi.selectedAsset.parent !== null) {
                         oi.isAssetModifying = true;
-                        oi.mainRoom.control.attach(intersects[0].object.parent.parent);
+                        oi.mainRoom.control.attach(oi.selectedAsset);
                         oi.mainRoom.scene.add(oi.mainRoom.control);
+                        
+                        if(!oi.isGroup){
+                            var selectedObjects = [];
+                            selectedObjects.push(oi.selectedAsset);
+                            oi.outlinePass.selectedObjects = selectedObjects;
+                        }
+                        else{
+                            // G키를 누르고 있지 않은 상태에서
+                            // 그룹 상태에서 그룹이 아닌 다른 에셋을 눌렀을 경우
+                            // 그룹이 풀리도록 설정
+                            if(!oi.gKeyPress){
+                                var elseGroup = false;
+                                for(var i=0; i<oi.groupAsset.length; i++){
+                                    if(oi.selectedAsset===oi.groupAsset[i]){
+                                        elseGroup = false;
+                                        break;
+                                    }
+                                    else
+                                        elseGroup = true;
+                                }
+                                if(elseGroup){
+                                    // 그룹 clear
+                                    oi.groupAsset = [];
+                                    oi.isGroup = false;
+                                    oi.mainRoom.control.groupClear();
+                                    oi.outlinePass.selectedObjects = [];
+                                    
+                                    // 선택한 에셋 outline
+                                    var selectedObjects = [];
+                                    selectedObjects.push(oi.selectedAsset);
+                                    oi.outlinePass.selectedObjects = selectedObjects;
+                                }
+                            }
+                        }
                     }
 
                     if (oi.isCtrl) {}
@@ -416,35 +471,20 @@
                         oi.unblockDiv();
                     }
                     
-                    oi.isGroup = false;
-                    
-                    /*
+                    // 그룹 clear
                     oi.groupAsset = [];
                     oi.isGroup = false;
-                    if(oi.resGroup!==null)
-                        oi.groupPos = oi.resGroup.position;
+                    oi.mainRoom.control.groupClear();
+                    oi.outlinePass.selectedObjects = [];
                     
-                    console.log(oi.resGroup);
-                    oi.resGroup = null;
+                    oi.g_copyAsset = [];
+                    oi.copyAsset = null;
+                    oi.isCopy = false;
                     
+                    break;
                     
-                    for(var i=1; i<oi.mainRoom.scene.children.length; i++){ // 그룹해제
-                        if(oi.mainRoom.scene.children[i].type=="Group"){
-                            for(var j=0; j<oi.mainRoom.scene.children[i].children.length; j++){
-                                var tmpObj = oi.mainRoom.scene.children[i].children[j];
-                                console.log(tmpObj);
-                                var cloneObj = tmpObj.clone();
-                                cloneObj.position.set(tmpObj.position.x,
-                                                     tmpObj.position.y,
-                                                     tmpObj.position.z);
-                                oi.mainRoom.scene.add(cloneObj);
-                            }
-                            oi.mainRoom.scene.remove(oi.mainRoom.scene.children[i]);
-                        }
-                    }
-                    
-                    //oi.mainRoom.scene.remove(oi.resGroup);
-                    */
+                case 71: //G key
+                    oi.gKeyPress = false;                
                     break;
             }
 
@@ -466,9 +506,14 @@
 
                     case 67: // C
                         if(event.ctrlKey){
-                            //console.log(oi.selectedAsset);
+                            
+                            if(oi.isGroup){ // 그룹 에셋 복사
+                                oi.g_copyAsset = oi.groupAsset;
+                            }
+                            else{
+                                oi.copyAsset = oi.selectedAsset;
+                            }
                             oi.isCopy = true;
-                            oi.copyAsset = oi.selectedAsset;
                             oi.copyCnt = 0;
                             console.log("ctrl+c");
                         }
@@ -480,17 +525,47 @@
                     
                     case 86: // V
                         if(event.ctrlKey){
-                            if(oi.isCopy===true && oi.copyAsset!==null){
-                                var pos = oi.copyAsset.position;
-                                var copyAsset = oi.copyAsset.clone();
+                            if(oi.isCopy){
                                 oi.copyCnt += 1;
-                                copyAsset.position.set(pos.x,pos.y+5+oi.copyCnt,pos.z);
-                                oi.mainRoom.scene.add(copyAsset);
-                                oi.mainRoom.control.attach(copyAsset);
-                                oi.Assets.interTarget.push(copyAsset);
+                                console.log("ctrl+v");
+                                
+                                //console.log(oi.g_copyAsset);
+                                if(oi.isGroup){ // 그룹 에셋 붙여넣기  
+                                    var pos = [];
+                                    var g_copy = [];
+                                    for(var i=0; i<oi.g_copyAsset.length; i++){
+                                        pos[i] = new THREE.Vector3();
+                                        pos[i].copy(oi.g_copyAsset[i].position);
+                                        g_copy[i] = oi.g_copyAsset[i].clone();
+                                        g_copy[i].position.set(pos[i].x,pos[i].y+5+oi.copyCnt,pos[i].z);
+                                        oi.mainRoom.scene.add(g_copy[i]);
+                                        oi.Assets.interTarget.push(g_copy[i]);
+                                    }
+                                    
+                                }
+                                
+                                else{
+                                    //console.log(oi.copyAsset);
+                                    if (oi.copyAsset !== null) {
+                                        var pos = oi.copyAsset.position;
+                                        var copyAsset = oi.copyAsset.clone();
+                                        copyAsset.position.set(pos.x, pos.y + 5 + oi.copyCnt, pos.z);
+                                        oi.mainRoom.scene.add(copyAsset);
+                                        oi.Assets.interTarget.push(copyAsset);
+
+                                        oi.mainRoom.control.attach(copyAsset);
+                                        oi.selectedAsset = copyAsset;
+
+                                        var selectedObjects = [];
+                                        selectedObjects.push(oi.selectedAsset);
+                                        oi.outlinePass.selectedObjects = selectedObjects;
+                                    }
+                                }
                                 
                                 oi.exploreUpdate();
-                                console.log("ctrl+v");
+                                
+                                oi.isAssetModifying = true;
+                                
                             }
                         }
                         break;
@@ -504,7 +579,23 @@
                         break;
 
                     case 46: // Delete
-                        oi.mainRoom.scene.remove(oi.selectedAsset);
+                        
+                        if(oi.isGroup){ // 그룹 삭제
+                            for(var i=0; i<oi.groupAsset.length; i++){
+                                oi.mainRoom.scene.remove(oi.groupAsset[i]);
+                            }
+                            
+                            // 그룹 clear
+                            oi.groupAsset = [];
+                            oi.isGroup = false;
+                            oi.mainRoom.control.groupClear();
+                            oi.outlinePass.selectedObjects = [];
+                                
+                        }
+                        else{
+                            oi.mainRoom.scene.remove(oi.selectedAsset);
+                        }
+                    
                         oi.isAssetModifying = false;
                         oi.mainRoom.control.detach();
                         oi.mainRoom.scene.remove(oi.mainRoom.control);
@@ -524,30 +615,37 @@
 
         oi.onDocumentKeyDown = function(event)
         {
-            /*
+            
             switch(event.keyCode){
                 case 71: // G
                     
                     //console.log("group");
+                    oi.gKeyPress = true;
                     if(oi.selectedAsset !== null){
 
                         oi.isGroup = false;
                         if(oi.groupAsset.length !== 0){
+                            var overlap = false;
                             for(var i=0; i<oi.groupAsset.length; i++){
                                 if(oi.selectedAsset.uuid === oi.groupAsset[i].uuid){ // 중복 에셋 그룹핑 방지
                                     oi.selectedAsset = null;
-                                    oi.isGroup = false;
+                                    overlap = true;
                                     break;
                                 }
                                 else
-                                    oi.isGroup = true;
+                                    overlap = false;
                             }
-                            if(oi.isGroup){ // 배열에 중복된 에셋이 없다면 그룹핑 배열에 push
+                            if(!overlap){ // 배열에 중복된 에셋이 없다면 그룹핑 배열에 push
                                 oi.groupAsset.push(oi.selectedAsset);
                                 oi.selectedAsset = null;
                                 
                                 console.log(oi.groupAsset);
+                                oi.mainRoom.control.groupAsset(oi.groupAsset);
+                                oi.outlinePass.selectedObjects = oi.groupAsset;
                             }
+                            
+                            if(oi.groupAsset.length>1)
+                                oi.isGroup = true;
                                 
                         }
                         else{ // 최초 그룹핑 에셋
@@ -558,7 +656,7 @@
                     
                     break;
             }
-            */
+            
         }
         
         // SAVE & LOAD 임시 
@@ -611,18 +709,106 @@
         oi.exploreClick = function(event){
             //console.log(event.target);
             
-            for(var i=0; i<oi.mainRoom.scene.children.length; i++){
-                
-                if(oi.mainRoom.scene.children[i].uuid===event.target.id){
-                    oi.mainRoom.control.attach(oi.mainRoom.scene.children[i]);
-                    oi.mainRoom.scene.add(oi.mainRoom.control);
-                    
-                    // 마우스로 그 에셋을 클릭한 효과를 냄
-                    oi.selectedAsset = oi.mainRoom.scene.children[i];
-                    oi.isAssetModifying = true;
+            if (!oi.gKeyPress) { // 일반 클릭 G 키가 눌려있지 않은 상태
+                for (var i = 0; i < oi.mainRoom.scene.children.length; i++) {
+
+                    if (oi.mainRoom.scene.children[i].uuid === event.target.id) {
+                        oi.mainRoom.control.attach(oi.mainRoom.scene.children[i]);
+                        oi.mainRoom.scene.add(oi.mainRoom.control);
+                        oi.selectedAsset = oi.mainRoom.scene.children[i];
+                        oi.isAssetModifying = true;
+
+                        if(!oi.isGroup){
+                            // 마우스로 그 에셋을 클릭한 효과를 냄
+                            var selectedObjects = [];
+                            selectedObjects.push(oi.selectedAsset);
+                            oi.outlinePass.selectedObjects = selectedObjects;
+                        }
+                        else{
+                            // G키를 누르지 않은 상태에서 에셋 익스플로를 누른 경우
+                            var elseGroup = false;
+                            
+                            for (var i = 0; i < oi.groupAsset.length; i++) {
+                                if (oi.selectedAsset === oi.groupAsset[i]) {
+                                    elseGroup = false;
+                                    break;
+                                } 
+                                else
+                                    elseGroup = true;
+                            }
+
+                            if (elseGroup) {
+                                // 그룹 clear
+                                oi.groupAsset = [];
+                                oi.isGroup = false;
+                                oi.mainRoom.control.groupClear();
+                                oi.outlinePass.selectedObjects = [];
+
+                                // 선택한 에셋 outline
+                                var selectedObjects = [];
+                                selectedObjects.push(oi.selectedAsset);
+                                oi.outlinePass.selectedObjects = selectedObjects;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+
+                    }
                 }
             }
-        }
+            else{ // G 키가 눌려져 있는 상태
+                for (var i = 0; i < oi.mainRoom.scene.children.length; i++) {
+
+                    if (oi.mainRoom.scene.children[i].uuid === event.target.id) {
+                        oi.mainRoom.control.attach(oi.mainRoom.scene.children[i]);
+                        oi.mainRoom.scene.add(oi.mainRoom.control);
+                        oi.selectedAsset = oi.mainRoom.scene.children[i];
+                        oi.isAssetModifying = true;                        
+                        
+                        oi.isGroup = false;
+                        if(oi.groupAsset.length !== 0){
+                            var overlap = false;
+                            for(var i=0; i<oi.groupAsset.length; i++){
+                                if(oi.selectedAsset.uuid === oi.groupAsset[i].uuid){ // 중복 에셋 그룹핑 방지
+                                    oi.selectedAsset = null;
+                                    overlap = true;
+                                    break;
+                                }
+                                else
+                                    overlap = false;
+                            }
+                            
+                            if(!overlap){ // 배열에 중복된 에셋이 없다면 그룹핑 배열에 push
+                                oi.groupAsset.push(oi.selectedAsset);
+                                oi.selectedAsset = null;
+                                
+                                console.log(oi.groupAsset);
+                                oi.mainRoom.control.groupAsset(oi.groupAsset);
+                                oi.outlinePass.selectedObjects = oi.groupAsset;
+                                
+                                if(oi.groupAsset.length>1)
+                                    oi.isGroup = true;
+                                break;
+                            }
+                            else{
+                                if(oi.groupAsset.length>1)
+                                    oi.isGroup = true;
+                                break;
+                            }
+      
+                        }
+                        else{ // 최초 그룹핑 에셋
+                            oi.groupAsset.push(oi.selectedAsset);
+                            oi.selectedAsset = null;
+                            oi.outlinePass.selectedObjects = oi.groupAsset;
+                            break;
+                        }
+                    }
+                }
+            }
+
+        } // Explore click 끝
         
         //  아이콘 이벤트 함수
         oi.IconOver = function () {

@@ -4,6 +4,15 @@
     <script type="text/javascript" src="THREE_JS/js/libs/bluebird.js"></script>
     <script type="text/javascript" src="THREE_JS/js/controls/TransformControls.js"></script>
     <script type="text/javascript" src='THREE_JS/js/libs/stats.js'></script>
+    
+    <script type="text/javascript" src='THREE_JS/js/postprocessing/EffectComposer.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/postprocessing/OutlinePass.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/postprocessing/RenderPass.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/postprocessing/ShaderPass.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/shaders/CopyShader.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/shaders/FXAAShader.js'></script>
+    <script type="text/javascript" src='THREE_JS/js/libs/Detector.js'></script>
+    
     <script type="text/javascript" src="OI_resource/OI_js/OI_Camera.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_MainScene.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_PreviewScene.js"></script>
@@ -147,6 +156,10 @@
             {
                 MainRoom.update();
                 PreviewScene.update();
+                
+                oiEvent.composer.setSize( MainRoom.windowWidth, MainRoom.windowHeight );
+                oiEvent.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / MainRoom.windowWidth,
+                                                                      1 / MainRoom.windowHeight );
             }
             
             $("#asset")[0].onresize = onResize
@@ -201,7 +214,8 @@
                 MainCustomCam.update();
                 PrevCustomCam.update();
                 PreviewScene.moveCamera();
-              //  oiEvent.exploreUpdate();
+                
+                oiEvent.composer.render();
 
                 /* 회전 프레임 테스트
                 Assets.bedAsset[5].then(function(obj){

@@ -685,6 +685,16 @@
 		var worldRotationMatrix  = new THREE.Matrix4();
 		var camPosition = new THREE.Vector3();
 		var camRotation = new THREE.Euler();
+        
+        // Group Var
+        var isGroup = false;
+        var groupAsset = [];
+        
+        var g_oldPosition = [];
+        var changePos = new THREE.Vector3();
+        
+        var g_oldScale = [];
+        var changeScale = new THREE.Vector3();
 
 		domElement.addEventListener( "mousedown", onPointerDown, false );
 		domElement.addEventListener( "touchstart", onPointerDown, false );
@@ -719,6 +729,23 @@
 			domElement.removeEventListener( "touchleave", onPointerUp );
 
 		};
+        
+        this.groupAsset = function(group){
+            isGroup = true;
+            groupAsset = group;
+            //console.log(group);
+        };
+        
+        this.groupClear = function(){
+            isGroup = false;
+            groupAsset = [];
+        
+            g_oldPosition = [];
+            changePos = new THREE.Vector3();
+        
+            g_oldScale = [];
+            changeScale = new THREE.Vector3();
+        };
 
 		this.attach = function ( object ) {
 
@@ -733,7 +760,6 @@
 			this.object = undefined;
 			this.visible = false;
 			this.axis = null;
-
 		};
 
 		this.getMode = function () {
@@ -890,6 +916,17 @@
 						parentScale.setFromMatrixScale( tempMatrix.getInverse( scope.object.parent.matrixWorld ) );
 
 						offset.copy( planeIntersect.point );
+                        
+                        if(isGroup){
+                            for(var i=0; i<groupAsset.length; i++){
+
+                                g_oldPosition[i] = new THREE.Vector3();
+                                g_oldPosition[i].copy(groupAsset[i].position);
+                                
+                                g_oldScale[i] = new THREE.Vector3();
+                                g_oldScale[i].copy(groupAsset[i].scale);
+                            }
+                        }
 
 					}
 
@@ -968,7 +1005,19 @@
 					}
 
 				}
+                
+                changePos.copy(point);
+  
+                for(var i=0; i<groupAsset.length; i++){
+                    
+                    if(groupAsset[i] !== scope.object){
+                        
+                        groupAsset[i].position.copy(g_oldPosition[i]);
+                        groupAsset[i].position.add(changePos);
+                    }
+                }
 
+                // translate End---
 			} else if ( _mode === "scale" ) {
 
 				point.sub( offset );
@@ -995,7 +1044,21 @@
 					}
 
 				}
+                
+                //console.log(point);
+                changeScale.copy(point);
+                
+                if(isGroup){
+                    for (var i = 0; i < groupAsset.length; i++) {
+                        if (groupAsset[i] !== scope.object) {
 
+                            groupAsset[i].scale.copy(g_oldScale[i]);
+                            groupAsset[i].scale.add(changeScale);
+                        }
+                    }
+                }
+
+                // scale End---
 			} else if ( _mode === "rotate" ) {
 
 				point.sub( worldPosition );
@@ -1098,6 +1161,14 @@
 
 				}
 
+                if(isGroup){
+                    for (var i = 0; i < groupAsset.length; i++) {
+                        if (groupAsset[i] !== scope.object) {
+                            groupAsset[i].quaternion.copy(tempQuaternion);
+                        }
+                    }
+                }
+                // Rotation End---
 			}
 
 			scope.update();
