@@ -84,6 +84,11 @@ OI_AssetDic = function (Assets)
                     oi.assetDic[targetAsset+j] = oi.Assets.doorAsset[j];
                 }
                 break;
+            case "basic":
+                for(var j=0; j<oi.Assets.basicCnt; j++){
+                    oi.assetDic[targetAsset+j] = oi.Assets.basicAsset[j];
+                }
+                break;
         }
     }
 }

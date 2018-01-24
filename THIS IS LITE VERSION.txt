@@ -7,3 +7,7 @@
 - 그룹핑, 아웃라이너 기능 추가
   - test.html , OI_Event.js , TransformControls.js 수정
   - THREE_JS에서 postprocessing, shaders 그리고 libs에서 Detector.js 추가
+
+- 물리엔진이 추가된 구조물들 추가
+  - test.html, OI_MainScene.js, OI_Event.js, OI_Assets.js, OI_AssetDic.js 수정
+  - OI_resource/asset/structure/basic/basic0~4까지 사진 추가

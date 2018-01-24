@@ -13,6 +13,8 @@
     <script type="text/javascript" src='THREE_JS/js/shaders/FXAAShader.js'></script>
     <script type="text/javascript" src='THREE_JS/js/libs/Detector.js'></script>
     
+    <script type="text/javascript" src='THREE_JS/js/physijs/physi.js'></script>
+    
     <script type="text/javascript" src="OI_resource/OI_js/OI_Camera.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_MainScene.js"></script>
     <script type="text/javascript" src="OI_resource/OI_js/OI_PreviewScene.js"></script>
@@ -121,6 +123,10 @@
     <script>
         function init()
         {
+                
+            Physijs.scripts.worker = 'THREE_JS/js/physijs/physijs_worker.js';
+            Physijs.scripts.ammo = 'ammo.js';
+            
             // 에셋 로딩, 객체 생성
             var Assets = new AssetsLoader();
             
@@ -191,9 +197,11 @@
                 obj.scale.set(10,10,10);
                 obj.name = "bed"+intaval;
                 MainRoom.scene.add(obj);
+                Assets.interTarget.push(obj);
                 intaval++;
-            });
+            });   
             
+            Assets.interTarget.push(MainRoom.floor);
             
             /* 회전 프레임 테스트
             

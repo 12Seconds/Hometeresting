@@ -185,16 +185,24 @@
 
                 var interTarget = oi.Assets.interTarget.slice(0);
                 //oi.mainRoom.floor,oi.mainRoom.ceiling,oi.mainRoom.wall_01,oi.mainRoom.wall_02
+                
+                /*
                 interTarget.splice(interTarget.indexOf(oi.mainRoom.floor), 1);
                 interTarget.splice(interTarget.indexOf(oi.mainRoom.ceiling), 1);
                 interTarget.splice(interTarget.indexOf(oi.mainRoom.wall_01), 1);
                 interTarget.splice(interTarget.indexOf(oi.mainRoom.wall_02), 1);
+                */
 
                 var intersects = raycaster.intersectObjects(interTarget, true);
 
                 if (intersects.length > 0) {
                     //console.log(intersects[0].object.parent.parent);
-                    oi.selectedAsset = intersects[0].object.parent.parent;
+                    //console.log(intersects[0].object.name.substring(0,5));
+                    if(intersects[0].object.name.substring(0,5)==="basic")
+                        oi.selectedAsset = intersects[0].object;
+                    else
+                        oi.selectedAsset = intersects[0].object.parent.parent;
+                    
                     if (oi.selectedAsset.parent !== null) {
                         oi.isAssetModifying = true;
                         oi.mainRoom.control.attach(oi.selectedAsset);
@@ -254,7 +262,8 @@
         }
 
         // Asset Allocate Mouse Move Event -----------
-        oi.Assets.interTarget.push(oi.mainRoom.floor, oi.mainRoom.ceiling, oi.mainRoom.wall_01, oi.mainRoom.wall_02);
+        //oi.Assets.interTarget.push(oi.mainRoom.floor, oi.mainRoom.ceiling, oi.mainRoom.wall_01, oi.mainRoom.wall_02);
+        oi.Assets.interTarget.push(oi.mainRoom.floor);
         oi.onMouseMove = function (event) {
             if (oi.isAssetAllocate) { // if 에셋 배치버튼 누르면
                 var mouseVector = new THREE.Vector3();

@@ -3,11 +3,25 @@
 MainSceneLoader = function(domElement)
 {
     var oi = this;
+    
     oi.domE = domElement;
     oi.windowWidth = domElement.clientWidth;
     oi.windowHeight = domElement.clientHeight;
 
-    oi.scene = new THREE.Scene();
+    //oi.scene = new THREE.Scene();
+    oi.scene = new Physijs.Scene;
+    oi.scene.setGravity(new THREE.Vector3(0,-30,0));
+    
+    /*
+    // 플레이 모드가 되면 달아주어야 하는 이벤트
+    oi.scene.addEventListener(
+        'update',
+        function() {
+            oi.scene.simulate( undefined, 1 );
+        }
+    );
+    */
+    
     oi.camera = new THREE.PerspectiveCamera(45, oi.windowWidth/oi.windowHeight, 1, 1000);
     
     oi.renderer = new THREE.WebGLRenderer({ clearAlpha: 1, alpha:true });
@@ -24,22 +38,41 @@ MainSceneLoader = function(domElement)
     
     oi.txr_Loader = new THREE.TextureLoader();
     oi.wallpaper01 = oi.txr_Loader.load("OI_resource/asset/wallpaper/testpaper.jpg");
+    
+    /*
     oi.wallpaper02 = oi.txr_Loader.load("OI_resource/asset/wallpaper/testpaper2.jpg");
     oi.wallpaper03 = oi.txr_Loader.load("OI_resource/asset/wallpaper/testpaper3.jpg");
     oi.wallpaper04 = oi.txr_Loader.load("OI_resource/asset/wallpaper/testpaper4.jpg");
     oi.wallpaper05 = oi.txr_Loader.load("OI_resource/asset/wallpaper/testpaper5.jpg");
     
     oi.structureG = new THREE.Group(); // 벽 등 구조물 그룹화
+    */
     
-    oi.wallGeometry = new THREE.BoxGeometry(1, 1, 1);
+    //oi.wallGeometry = new THREE.BoxGeometry(1, 1, 1);
+    
     oi.wallMaterial = new THREE.MeshLambertMaterial({map:oi.wallpaper01, side:THREE.DoubleSide});
+    
+    /*
     oi.wallMaterial2 = new THREE.MeshLambertMaterial({map:oi.wallpaper02, side:THREE.DoubleSide});
     oi.wallMaterial3 = new THREE.MeshLambertMaterial({map:oi.wallpaper03, side:THREE.DoubleSide});
     oi.wallMaterial4 = new THREE.MeshLambertMaterial({map:oi.wallpaper04, side:THREE.DoubleSide});
     oi.wallMaterial5 = new THREE.MeshLambertMaterial({map:oi.wallpaper05, side:THREE.DoubleSide});
+    */
     
+    oi.pyWallMaterial = Physijs.createMaterial(
+        oi.wallMaterial,
+        .8, // high friction
+        .4 // low restitution
+    );
             
     // 공간 생성 -----------------------------------------------------------------------
+    
+    oi.floor = new Physijs.BoxMesh(
+        new THREE.BoxGeometry(50,1,50),
+        oi.pyWallMaterial,
+        0 // mass
+    );
+    /*
     oi.floor = new THREE.Mesh(oi.wallGeometry, oi.wallMaterial3);
     oi.floor.scale.set(100,0.2,100);
     oi.floor.castShadow = true;
@@ -61,6 +94,7 @@ MainSceneLoader = function(domElement)
     oi.wall_02.position.x = 50;
     oi.wall_02.position.y = 25;
     //oi.scene.add(oi.wall_02);
+    */
         
     // 축 추가
     /*
@@ -73,10 +107,13 @@ MainSceneLoader = function(domElement)
     oi.PointLight.intensity = 1;
    // oi.scene.add(oi.PointLight);
 
-    oi.structureG.add(oi.floor, oi.ceiling, oi.wall_01, oi.wall_02, oi.PointLight);
+   // oi.structureG.add(oi.floor, oi.ceiling, oi.wall_01, oi.wall_02, oi.PointLight);
     
-    oi.scene.add(oi.structureG);
+    oi.floor.name = "basic_cube0";
 
+    oi.scene.add(oi.floor);
+    oi.scene.add(oi.PointLight);
+    oi.scene.simulate();
     
   // update function (resize)
     oi.update = function(){

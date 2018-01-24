@@ -17,9 +17,9 @@ AssetsLoader = function()
         oi.bedAsset[i] = new Promise(function(resolve,reject){
             var loader = new THREE.ObjectLoader();
             loader.load("OI_resource/asset/furniture/bed/bed" + i + "/bed.json",function(obj){
-                //obj.name = "";
+                obj.name = "bed";
                 obj.userData.name = "asset";
-                obj.userData.assetName = "bed";
+                //obj.userData.assetName = "bed";
                 //console.log(obj.userData);
                 // Smooth Shading ---------------------------------------
                 var geo;
@@ -36,7 +36,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -66,7 +66,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -95,7 +95,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -124,7 +124,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -182,7 +182,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -211,7 +211,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -244,7 +244,7 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
@@ -273,15 +273,15 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
     }
     
     // Structure ===============================================================
-    oi.strucNames = ["door"];
-    oi.strucCnts = [1];
+    oi.strucNames = ["door","basic"];
+    oi.strucCnts = [1,5];
     
     // Door -------------
     oi.doorAsset = [];
@@ -306,11 +306,101 @@ AssetsLoader = function()
                     }
                 }
                 // ------------------------------------------------------
-                oi.interTarget.push(obj);
+                //oi.interTarget.push(obj);
                 resolve(obj);
             });
         });
     }
         
+    // Basic -------------
+    oi.basicAsset = [];
+    oi.basicCnt = oi.strucCnts[1];
     
+    // Basic Cube
+    oi.basicAsset[0] = new Promise(function(resolve,reject){
+        var cubeMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({side:THREE.DoubleSide}),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var cube = new Physijs.BoxMesh(
+            new THREE.BoxGeometry(1,1,1),
+            cubeMaterial,
+            0 // mass
+        );
+        
+        cube.name = "basic_cube";
+        cube.userData.name = "asset";
+        resolve(cube);
+    });
+    
+    // Basic Sphere
+    oi.basicAsset[1] = new Promise(function(resolve,reject){
+        var sphereMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({side:THREE.DoubleSide}),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var sphere = new Physijs.SphereMesh(
+            new THREE.SphereGeometry( 0.5, 32, 32 ),
+            sphereMaterial,
+            undefined,
+            { restitution: Math.random() * 1.5 }
+        );
+        
+        sphere.name = "basic_sphere";
+        sphere.userData.name = "asset";
+        resolve(sphere);
+    });
+    
+    // Basic Cylinder
+    oi.basicAsset[2] = new Promise(function(resolve,reject){
+        var cylinderMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({side:THREE.DoubleSide}),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var cylinder = new Physijs.CylinderMesh(
+            new THREE.CylinderGeometry( 0.5, 0.5, 1, 32 ),
+            cylinderMaterial
+        );
+        
+        cylinder.name = "basic_cylinder";
+        cylinder.userData.name = "asset";
+        resolve(cylinder);
+    });
+    
+    // Basic OctahedronGeometry
+    oi.basicAsset[3] = new Promise(function(resolve,reject){
+        var octaMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({side:THREE.DoubleSide}),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var octahedron = new Physijs.CylinderMesh(
+            new THREE.OctahedronGeometry( 0.5, 0 ),
+            octaMaterial
+        );
+        
+        octahedron.name = "basic_octahedron";
+        octahedron.userData.name = "asset";
+        resolve(octahedron);
+    });
+    
+    // Basic Cone
+    oi.basicAsset[4] = new Promise(function(resolve,reject){
+        var coneMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({side:THREE.DoubleSide}),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var cone = new Physijs.ConeMesh(
+            new THREE.CylinderGeometry( 0, 0.5, 1, 32 ),
+            coneMaterial
+        );
+        
+        cone.name = "basic_cone";
+        cone.userData.name = "asset";
+        resolve(cone);
+    });
 }
