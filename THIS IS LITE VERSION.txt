@@ -4,6 +4,19 @@
 
 0.4 버전 제작중
 
+18.01.19-----송식-------------------------------------------
+
+index문서 about부분 큐브 렌더링 삭제
+
+index.html, test.html 정적 경로 변경 
+
+index.html - 로그아웃 상태에서 myhome버튼 클릭시 로그인 alert.
+
+indexaa.html - myhome버튼 적용 이전 백업
+
+test.html - 에셋 익스플로러, 마이페이지 적용된 상태
+------------------------------------------------------------
+
 - 그룹핑, 아웃라이너 기능 추가
   - test.html , OI_Event.js , TransformControls.js 수정
   - THREE_JS에서 postprocessing, shaders 그리고 libs에서 Detector.js 추가
