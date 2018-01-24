@@ -24,3 +24,4 @@ test.html - 에셋 익스플로러, 마이페이지 적용된 상태
 - 물리엔진이 추가된 구조물들 추가
   - test.html, OI_MainScene.js, OI_Event.js, OI_Assets.js, OI_AssetDic.js 수정
   - OI_resource/asset/structure/basic/basic0~4까지 사진 추가
+  - THREE_JS에 physijs 추가
