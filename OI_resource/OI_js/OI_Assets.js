@@ -218,6 +218,39 @@ AssetsLoader = function()
     }
     
     // Ornament ===============================================================
+    
+    oi.ornaNames = ["frame"];
+    oi.ornaCnts = [1];
+    
+    // frame -------------
+    oi.frameAsset = [];
+    oi.frameCnt = oi.ornaCnts[0];
+    
+    for(var i=0; i<oi.frameCnt; i++){
+        oi.frameAsset[i] = new Promise(function(resolve,reject){
+            var loader = new THREE.ObjectLoader();
+            loader.load("OI_resource/asset/ornament/frame/frame" + i + "/frame.json",function(obj){
+                obj.name = "frame";
+                obj.userData.name = "asset";
+                // Smooth Shading ---------------------------------------
+                var geo;
+                for(var j=0; j<obj.children.length; j++){
+                    for(var k=0; k<obj.children[j].children.length; k++){
+                        if(obj.children[j].children[k] instanceof THREE.Mesh){
+                            geo = obj.children[j].children[k].geometry;
+                            geo.computeFaceNormals();
+                            geo.mergeVertices()
+                            geo.computeVertexNormals();
+                        }
+                    }
+                }
+                // ------------------------------------------------------
+                //oi.interTarget.push(obj);
+                resolve(obj);
+            });
+        });
+    }
+    /*
     oi.ornaNames = ["amp","guitar"];
     oi.ornaCnts = [0,0];
     
@@ -278,6 +311,7 @@ AssetsLoader = function()
             });
         });
     }
+    */
     
     // Structure ===============================================================
     oi.strucNames = ["door","basic"];

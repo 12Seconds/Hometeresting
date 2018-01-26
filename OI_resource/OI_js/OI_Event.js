@@ -164,6 +164,7 @@
                 oi.selectedDiv = targetDiv;
                 oi.dic.assetDic[targetDiv.id].then(function (obj) {
                     oi.Preview.sceneReset();
+                    console.log(obj);
                     var viewAsset = obj.clone();
                     viewAsset.position.set(0, 2, 0);
                     viewAsset.scale.set(8, 8, 8);

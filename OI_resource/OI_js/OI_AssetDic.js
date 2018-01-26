@@ -54,12 +54,18 @@ OI_AssetDic = function (Assets)
                 break;
         }
     }
-    /*
+    
     // Ornament Dictionary --------------------------------
     for(var i=0; i<oi.Assets.ornaNames.length; i++){
         var targetAsset = oi.Assets.ornaNames[i];
         
         switch(targetAsset){  // dictionary ( ex ---> amp0 Mapping oi.Assets.ampAsset[0] )
+            case "frame":
+                for(var j=0; j<oi.Assets.frameCnt; j++){
+                    oi.assetDic[targetAsset+j] = oi.Assets.frameAsset[j];
+                }
+                break;
+                /*
             case "amp":
                 for(var j=0; j<oi.Assets.ampCnt; j++){
                     oi.assetDic[targetAsset+j] = oi.Assets.ampAsset[j];
@@ -71,9 +77,10 @@ OI_AssetDic = function (Assets)
                     oi.assetDic[targetAsset+j] = oi.Assets.guitarAsset[j];
                 }
                 break;
+                */
         }
     }
-    */
+    
     // Structure Dictionary --------------------------------
     for(var i=0; i<oi.Assets.strucNames.length; i++){
         var targetAsset = oi.Assets.strucNames[i];
