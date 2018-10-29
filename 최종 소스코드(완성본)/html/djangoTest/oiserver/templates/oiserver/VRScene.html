@@ -1,0 +1,427 @@
+{%load static%}
+<html>
+<head>
+    <script type="text/javascript" src="{% static 'THREE_JS/three_latest.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/libs/stats.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/libs/bluebird.js'%}"></script>
+    
+    <!-- VR -->
+	<script type="text/javascript" src="{% static 'THREE_JS/js/loaders/MTLLoader.js'%}"></script>
+	<script type="text/javascript" src="{% static 'THREE_JS/js/loaders/OBJLoader.js'%}"></script>
+
+	<script type="text/javascript" src="{% static 'THREE_JS/js/vr/GearVRController.js'%}"></script>
+	<script type="text/javascript" src="{% static 'THREE_JS/js/vr/WebVR.js'%}"></script>
+
+    <!--script type="text/javascript" src="{% static 'THREE_JS/js/controls/TransformControls.js'%}"></script-->
+    
+    <!-- 플레이 모드 포인터 락커 -->
+    <!--script type="text/javascript" src="{% static 'THREE_JS/js/controls/PointerLockControls.js'%}"></script-->
+    
+    <script type="text/javascript" src="{% static 'THREE_JS/js/physijs/physi.js'%}"></script>
+    
+    <!-- OI JS -->
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_Camera.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_Assets.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_AssetDic.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_Scene.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_Event.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_SceneManager.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_FrameEvent.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_MultiSceneUpdate.js'%}"></script>
+    <!--script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_TestPlay.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VideoEvent.js'%}"></script-->
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_RTC.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/video/threex.videotexture/threex.videotexture.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VR_VideoEvent.js'%}"></script>
+    
+    <!-- ChatBot -->
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_ChatBot.js'%}"></script>
+    
+    
+    <!--script type="text/javascript" src="Jquery/jquery-3.2.1.js"></script-->
+    <script type="text/javascript" src="{% static 'Jquery/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'Jquery/jquery-ui.js'%}"></script>
+    
+    <!-- css -->
+    <link rel = "stylesheet" type="text/css" href="{% static 'HdStylesheet.css'%}"> 
+    <link rel = "stylesheet" type="text/css" href="{% static 'mypage.css'%}">
+    <link rel = "stylesheet" type="text/css" href="{% static 'hometerstingstyle.css'%}"> 
+
+    <!-- jquery ui 전용 css -->  
+    <link rel="stylesheet" href="{% static 'Jquery/jquery-ui.theme.css'%}">
+    <link rel="stylesheet" href="{% static 'Jquery/jquery-ui.structure.css'%}">
+
+    <!-- http://docs.galleria.io/article/18-quick-start -->
+    <link type="text/css" rel="stylesheet" href="{% static 'galleria/themes/classic/galleria.classic.css'%}">
+    <script type="text/javascript" src="{% static 'galleria/galleria-1.5.7.js'%}"></script>
+    <script type="text/javascript" src="{% static 'galleria/themes/classic/galleria.classic.min.js' %}"></script>
+    
+    <!-- https://bgrins.github.io/spectrum/ -->
+    <script src="{% static 'spectrum/spectrum.js'%}"></script>
+    
+    <!-- multiplay socket.io.js -->
+    <script src="{% static 'socket.io.js'%}"></script>
+    
+    <!-- RTC js and css -->
+    <script src="{% static 'rtc/adapter.js'%}"></script>
+    <script src="{% static 'rtc/FileBufferReader.js'%}"></script>
+    <script src="{% static 'rtc/getHTMLMediaElement.js'%}"></script>
+    <script src="{% static 'rtc/RTCMultiConnection.min.js'%}"></script>
+    <link rel='stylesheet' href="{% static 'rtc/getHTMLMediaElement.css'%}">
+    
+    <link rel='stylesheet' href="{% static 'spectrum/spectrum.css'%}">
+    
+    <link rel='stylesheet' href="{% static 'VRSceneStyle.css'%}">
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<!-- Origin Trial Token, feature = WebVR (For Chrome M62+), origin = https://threejs.org, expires = 2018-04-03 -->
+		<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M62+)" data-expires="2018-04-03" content="AqIrNtaoJSmDZatgEEW2ehuK9ITIiFk3gZ3/gC6Vp0gF85NDYl7IzVPj4Bh7O6SIcr3ICOm6kocYSaS+BPkazgYAAABQeyJvcmlnaW4iOiJodHRwczovL3RocmVlanMub3JnOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMU02MiIsImV4cGlyeSI6MTUyMjc2MzAwMn0=">
+</head>
+
+<body>
+
+<audio id="CBspeaker"></audio>
+   
+    <input type="hidden" id="noRoom" value="true">
+    <input type="hidden" id="RoomData" value="{{ defaultRoom }}">
+    
+    <input type="hidden" id="userNickName" value="{{ nickName }}"> 
+    
+    <input type="hidden" id="myKey" value="{{ myKey }}">
+    <input type="hidden" id="hostKey" value="default">
+    <input type="hidden" id="mulRoomName" value="default">
+    <input type="hidden" id="multiCreate" value="false">
+    <input type="hidden" id="isMultiplaying" value="false">
+    
+    <input type="hidden" id="oiEventLoading" value="false">
+    
+    <img id="crosshair" src="{% static 'OI_resource/images/crosshair.png'%}" height="24" />
+   
+    <!-- Loading -->
+    <div id="OIloading">
+        <div class="sk-folding-cube">
+          <div class="sk-cube1 sk-cube"></div>
+          <div class="sk-cube2 sk-cube"></div>
+          <div class="sk-cube4 sk-cube"></div>
+          <div class="sk-cube3 sk-cube"></div>
+        </div>
+
+        <div id="OIloading-full" class="progress">
+          <div id="OIloading-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+          <div id="OIloading-val"></div>
+        </div>
+    </div>
+
+   
+    <!-- VR button -->
+    <div id="VRbutton"></div>
+   
+    <!-- title -->
+    <div id="header">
+        <a class="brand" href="https://www.oddidea.xyz">HOMETERESTING</a>
+    </div>
+    
+    <!-- 3D Rendering Canvas -->
+    <div id="content" class="content_canvas"></div>
+    
+    <!-- performance monitor -->
+    <div id="Stats-output"></div>
+    
+    <!-- Play Window -->
+    <div id="playWindowVR" class="card text-white bg-secondary mb-3">
+        <div id="PW_body1">
+    	    <div class="VRnavbar navbar bg-primary">
+    	        <a class="navbar-brand">함께놀기</a>
+    	    </div>
+    	    <div id="mulRoombodyVR" class="card-body">
+    	     <p class="card-text">다른사람이 만든 방에서 함께 놀 수 있어요 !</p>
+    	        <button id="makeMulRoom" type="button" class="btn btn-primary btn-sm">방 만들기</button>
+    	        <button id="mulRoomRefresh" type="button" class="btn btn-primary btn-sm">새로고침</button>
+    	        <table class="table table-hover">
+    	            <thead>
+    	                <tr>
+    	                    <th scope="col">Number</th>
+    	                    <th scope="col">Host</th>
+    	                    <th scope="col">Name</th>
+    	                    <th scope="col">people</th>
+    	                </tr>
+    	            </thead>
+    	            <tbody id="multiRoomList">
+    	            </tbody>
+    	        </table>
+    	    </div>
+        </div>
+        <div id="PW_body2">
+    	    <div class="VRnavbar navbar bg-primary">
+    	        <a class="navbar-brand">혼자놀기</a>
+    	        <div class="form-inline my-2 my-lg-0">
+    	            <input id="searchRoom" class="form-control mr-sm-2" type="text" placeholder="Search">
+    	            <button id="dosearch" class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    	        </div>
+    	    </div>
+    	    <div id="bodyupdateVR" class="bg-secondary card-body">
+    	        <p class="card-text">다른 사람들이 만든 방에 혼자 놀러갈수 있어요!</p>
+    	        <div id="searchingName" title="default">...님의 방 목록</div>
+    	            <table class="table table-hover">
+    	                <thead>
+    	                    <tr>
+    	                        <th scope="col">Number</th>
+    	                        <th scope="col">Room Name</th>
+    	                    </tr>
+    	                </thead>
+    	                <tbody id="showJoinroom">
+    	                </tbody>
+    	            </table>
+    	    </div>
+        </div>
+	</div>
+
+    <!-- 멀티 플레이 방 만들기 Window -->
+    <div id="creatWindowVR" class="card border-secondary mb-3">
+        <div class="card-header" style="font-size:18px">
+            함께할 방을 선택해 주세요
+        <button id="CWexit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+        </div>
+        <div id="CWcontents" class="card-body">
+        </div>
+    </div>
+    <!-- yes/no Btn Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="MExit">&times;</span>
+          <h2>really sure?</h2>
+        </div>
+
+        <div class="modal-body">
+          <span id="deleteRoomName">your room data is unsafe</span>
+        </div>
+
+        <div class="Commit">
+          <span id="yesBtn" class="yes">Yes</span>
+          <span id="noBtn" class="no">No</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 멀티 플레이 나가기 버튼 -->
+    <button id="mulExit" type="button" class="btn btn-outline-secondary" 
+        style="position:absolute; top:30px; display:none">Exit</button>
+        
+    <!-- RTC 방 만들기 모달   -->
+    <div id="RTCModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span id="RTCModalExit" class="close">x</span>
+          <h2>Create channel</h2>
+        </div>
+        <div class="modal-body">
+            <p>방 이름을 입력해 주세요.</p>
+         <input id="RTCModalinput" type="text" name="userNickName" value="default" placeholder="input your nickname"/>
+        </div>
+        <div id="RTCModalinputCommit" class="saveCommit">
+          <span class="save">Start</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- RTC window -->
+    <div id="RTCWindow" class="card text-white bg-secondary mb-3">
+        <div class="navbar bg-primary" style="max-height : 50px;">
+            <a class="navbar-brand">채팅방</a>
+             <button id="RTCExit" type="button" class="close" data-dismiss="alert" style="color:white;">&times;</button>
+        </div>
+        <div class="card-body" style="text-align;overflow:auto;" >
+
+         <p class="card-text">채팅방을 만들어 보세요</p>
+            <button id="makeRTCRoom" type="button" class="btn btn-primary btn-sm">방 만들기</button>
+            <button id="outRTCRoom" type="button" class="btn btn-primary btn-sm" style="display:none;">나가기</button>
+
+            <div class="form-inline my-2 my-lg-0">
+                <input id="RTCChannelSearch" class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button id="RTCChannelSearchSubmit" class="btn btn-secondary my-2 my-sm-0">입장</button>
+            </div>
+
+        </div>
+        <div class="navbar bg-primary">
+
+        </div>
+        <div class="card-body" id="multiCardBody">
+            <p class="card-text">멀티플레이 채팅방에 바로가기</p>
+            <button id="makeMulRTCRoom" type="button" class="btn btn-primary btn-sm">만들기</button>
+            <button id="joinMulRTCRoom" type="button" class="btn btn-primary btn-sm">참여</button>
+        </div>
+        <div class="card-body">
+            <span class="card-text">현재 참여중인 방은 : </span><span id="currentJoinRoomText">없음</span><br>
+            <!--<button id="chatDivOn" type="button" class="btn btn-primary btn-sm">채팅창 띄우기</button>-->
+        </div>
+    </div>
+    <!-- 채팅 창-->
+    <div id='RTCKeyChatWindow' class="alert alert-dismissible alert-info" style="display:none; position:abolute; top:5px; left:0px">
+        <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+
+        <div id="RTCKeyChatOutput">
+        </div>
+        <div id="RTCKeychatInput" class="form-group">
+            <input type="text" class="form-control" placeholder="go chat! " id="inputDefault">
+            <button id="RTCKeychatInputSummit" type="button" class="btn btn-outline-info">enter</button>
+        </div>
+    </div>
+    <!-- audio container test -->
+    <div id='audioContainer' style="position:absolute; top:0px; left:0px; background-color:aqua; display:none;"></div>
+
+    <script>
+        function init()
+        {
+            // 물리엔진 적용 관련
+            Physijs.scripts.worker = "/static/THREE_JS/js/physijs/physijs_worker.js";
+            Physijs.scripts.ammo = "/static/THREE_JS/js/physijs/ammo.js";
+
+            // 에셋 로딩 & 객체 생성
+            var Assets = new AssetsLoader();
+            // 에셋 사전 생성
+            var Dictionary = new OI_AssetDic(Assets);
+            
+            // 씬 매니저 객체 생성
+            //var Manager = new SceneManager("user");
+            
+            var VideoEvent = new OI_VR_VideoEvent();
+            var ChatBot = new OI_ChatBot(VideoEvent);
+            
+            // VR룸 씬 객체 생성
+            var Room = new VR_SceneLoader(document.getElementById("content"), ChatBot, VideoEvent, this);
+            // 방 정보
+            var RoomData = document.getElementById("RoomData").value;
+            
+            var SceneManager = new VR_SceneManager();
+            
+            var frameEvent = new OI_VR_FrameEvent();
+            
+            // RTC 객체 생성
+            var oiRTC = new OI_VR_RTC();
+            
+            var VREvent = new OI_VR_Event(document, Room, Assets, Dictionary, SceneManager,frameEvent);
+            
+            /* 챗봇 테스트 */
+            var onDocumentKeyUp = function (event) {
+                switch (event.keyCode)
+                {
+                    case 71: //(g키)
+                        if(ChatBot.stat !="none")
+                            ChatBot.recognition.start();
+                            //animate();
+                        break;
+                }
+            }
+            document.addEventListener('keyup', onDocumentKeyUp, false);
+            
+            // default room loading
+            SceneManager.sceneLoad(Room, RoomData, Assets, Dictionary);
+            
+            // Custom Camera
+            //var MainCustomCam = new THREE.OddIdeaCamera( Room.camera, Room.renderer.domElement);
+           // Room.camera.lookAt(new THREE.Vector3(50,20,-50));
+            document.getElementById("VRbutton").appendChild( WEBVR.createButton( Room.renderer ) );
+            // *-----------------------------------------------------------*
+            function onResize()
+            {
+                Room.sizeUpdate();
+            }
+            window.addEventListener('resize', onResize, false); 
+            
+            /*
+            function initStats() {
+                var stats = new Stats();
+                stats.setMode(0); // 0: fps, 1: ms
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.left = '10px';
+                stats.domElement.style.bottom = '150px';
+                document.getElementById("Stats-output").appendChild(stats.domElement);
+                return stats;
+            }
+            var stats = initStats();
+            */
+            /////////////////////////////////////////////////////
+            //현재 생성되어있는 멀티플레이 룸 들을 받아온다
+            $.ajax({                            
+            type: "POST",                   
+            url: '/doMulRoomAll/',                
+            data: { },      
+            dataType: "json",                           
+
+            success: function(response){                
+                        $("#multiRoomList").empty();
+
+                        for (var i=0;i<response.mulRoomList.length;i++){
+                            $("#multiRoomList").append('<tr id="mulRoomList" class="mulRoomList table-primary" title="'+response.mulRoomHost[i]+'"><th scope="row">'+i+'</th><td>'+response.mulRoomHost[i]+'</td><td>'+response.mulRoomList[i]+'</td><td>'+response.NumOfPeople[i]+'</td></tr>');
+                        }
+                    },
+            error: function(request, status, error){    // 통신 실패시
+                        //alert("데이터 저장에 실패했습니다.");
+                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error); // 에러시에 디버깅 내용 포함시키기
+                        console.log("ajax 실패");
+                    },
+            });
+            /////////////////////////////////////////////////////
+            
+            var oiEventLoading = new Image();
+            oiEventLoading.src = '/static/Jquery/images/ui-icons_444444_256x240.png';
+            oiEventLoading.onerror = function () { $('#oiEventLoading').val("true"); };
+        
+            var a = 1;
+            
+			function animate() { Room.renderer.animate( renderScene ); }
+            
+            function renderScene()
+            {
+                // 로딩
+                if(Room.needLoading){ Room.loading(); }
+                
+                if($('#noRoom').val() === "false"){
+                    Room.renderer.render(Room.scene, Room.camera);
+                    Room.controller.update();
+                }
+                //stats.update();
+                
+                Room.update();
+                
+                // 비디오 재생
+                VideoEvent.updateFcts.forEach(function(updateFn, key){
+			         updateFn();
+                });
+                
+                //ChatBot.update();
+                
+                if(Room.cam_cube !== undefined){
+                   // Room.cam_cube.position.y = 200;
+                   // console.log(Room.cam_cube.position);
+                }
+                /*
+                if(a){
+                    console.log("Room.renderer.vr");
+                    console.log(Room.renderer.vr);
+                    console.log("Room.renderer.vr.getCamera()");
+                    console.log(Room.renderer.vr.getCamera());
+                    a=0;
+                }
+                */
+              //  MainCustomCam.update();
+                
+                
+                
+             //   requestAnimationFrame(renderScene);
+            }
+            
+      //   renderScene();
+            animate();
+        };
+        
+        window.onload = init;
+        
+    </script>
+</body>
+</html>

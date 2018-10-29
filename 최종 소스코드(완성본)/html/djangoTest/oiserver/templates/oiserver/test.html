@@ -1,0 +1,986 @@
+{%load static%}
+<html>
+<head>
+    <script type="text/javascript" src="{% static 'THREE_JS/three.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/libs/bluebird.js'%}"></script>
+    
+    <!-- 오브젝트 수정용 컨트롤러(크기, 회전, 위치) -->
+    <script type="text/javascript" src="{% static 'THREE_JS/js/controls/TransformControls.js'%}"></script>
+    <!-- 플레이 모드 포인터 락커 -->
+    <script type="text/javascript" src="{% static 'THREE_JS/js/controls/PointerLockControls.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'THREE_JS/js/libs/stats.js'%}"></script>
+    
+    <!-- 오브젝트 아웃라인, 그룹핑, 물리엔진 추가 -->
+    <script type="text/javascript" src="{% static 'THREE_JS/js/postprocessing/EffectComposer.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/postprocessing/OutlinePass.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/postprocessing/RenderPass.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/postprocessing/ShaderPass.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/shaders/CopyShader.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/shaders/FXAAShader.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/libs/Detector.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'THREE_JS/js/physijs/physi.js'%}"></script>
+    <script type="text/javascript" src="{% static 'THREE_JS/js/video/threex.videotexture/threex.videotexture.js'%}"></script>
+    
+    
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_Camera.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_MainScene.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_PreviewScene.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_Assets.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_Event.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_AssetDic.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_SceneManager.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_MultiSceneUpdate.js'%}"></script>
+    <!-- 테스트 플레이 추가 -->
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_TestPlay.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_FrameEvent.js'%}"></script>
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_VideoEvent.js'%}"></script>
+    
+    <script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_RTC.js'%}"></script>
+    
+    <!--script type="text/javascript" src="Jquery/jquery-3.2.1.js"></script-->
+    <script type="text/javascript" src="{% static 'Jquery/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'Jquery/jquery-ui.js'%}"></script>
+    
+    <link rel = "stylesheet" type="text/css" href="{% static 'HdStylesheet.css'%}"> 
+    <link rel = "stylesheet" type="text/css" href="{% static 'mypage.css'%}">
+    <link rel = "stylesheet" type="text/css" href="{% static 'hometerstingstyle.css'%}"> 
+
+    <!-- jquery ui 전용 css  !-->  
+    <link rel="stylesheet" href="{% static 'Jquery/jquery-ui.theme.css'%}">
+    <link rel="stylesheet" href="{% static 'Jquery/jquery-ui.structure.css'%}">
+
+    <!-- http://docs.galleria.io/article/18-quick-start -->
+    <link type="text/css" rel="stylesheet" href="{% static 'galleria/themes/classic/galleria.classic.css'%}">
+    <script type="text/javascript" src="{% static 'galleria/galleria-1.5.7.js'%}"></script>
+    <script type="text/javascript" src="{% static 'galleria/themes/classic/galleria.classic.min.js' %}"></script>
+    
+    <!-- https://bgrins.github.io/spectrum/ -->
+    <script src="{% static 'spectrum/spectrum.js'%}"></script>
+    
+    <!-- multiplay socket.io.js -->
+    <script src="{% static 'socket.io.js'%}"></script>
+    
+    <!-- RTC js and css -->
+    <script src="{% static 'rtc/adapter.js'%}"></script>
+    <script src="{% static 'rtc/FileBufferReader.js'%}"></script>
+    <script src="{% static 'rtc/getHTMLMediaElement.js'%}"></script>
+    <script src="{% static 'rtc/RTCMultiConnection.min.js'%}"></script>
+    <link rel='stylesheet' href="{% static 'rtc/getHTMLMediaElement.css'%}">
+    
+    <link rel='stylesheet' href="{% static 'spectrum/spectrum.css'%}">
+<style type="text/css">
+
+
+</style>
+</head>
+
+<body>
+    <input type="hidden" id="playing_val" value="false">
+    <input type="hidden" id="prfileRoomData" value="{{ profileRoom }}">
+    <input type="hidden" id="planeRoom" value="{{ planeRoom }}">
+    <!-- 나의 닉네임  -->
+    <input type="hidden" id="userNickName" value="{{ nickName }}"> 
+
+    <input type="hidden" id="myKey" value="{{ myKey }}">
+    <input type="hidden" id="hostKey" value="default">
+
+    <input type="hidden" id="mulRoomName" value="default">
+    <input type="hidden" id="multiCreate" value="false">
+
+    <input type="hidden" id="isMultiplaying" value="false">
+
+<!-- 로딩 화면 div -->
+<div id="OIloading">
+
+    <div class="sk-folding-cube">
+      <div class="sk-cube1 sk-cube"></div>
+      <div class="sk-cube2 sk-cube"></div>
+      <div class="sk-cube4 sk-cube"></div>
+      <div class="sk-cube3 sk-cube"></div>
+    </div>
+
+    <div id="OIloading-full" class="progress">
+      <div id="OIloading-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+      <div id="OIloading-val"></div>
+    </div>
+    
+</div>
+<input type="hidden" id="oiEventLoading" value="false">
+<input type="hidden" id="oiTextureLoading" value="false">
+<input type="hidden" id="LoadingDoOnce" value="true">
+<input type="hidden" id="tpEventStatus" value="false">
+<input type="hidden" id="cubeOriginPos" value="null">
+
+<!--     <ul style="" id="assetExplore">    
+        <div id="explorer_exit" class=""></div>
+    </ul> -->
+<div id="assetExplore" class="card border-warning mb-3" style="max-width: 20rem;">
+	<div class="card-header">생성 되어 있는 오브젝트
+	     <button id="explorer_exit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+	</div>
+    <div id="assetExpList" class="card-body">
+    </div>
+	<!--<table id="assetList" class="table table-hover">
+	    <tr class="table-light">
+	      <th scope="row">Light</th>
+	    </tr>
+	    <tr class="table-light">
+	      <th scope="row">Light</th>
+	    </tr>
+	    <tr class="table-light">
+	      <th scope="row">Light</th>
+	    </tr>  
+	</table> -->
+</div>    
+<!-- 테스트플레이 블락커 -->
+<div id="blocker">
+    <div id="instructions">
+    <span style="font-size:40px">CONTINUE</span>
+    <br />
+    (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+    </div>
+</div>    
+
+<img id="crosshair" src="{% static 'OI_resource/images/crosshair.png'%}" height="24" />
+
+<!-- 플레이 모드 게시판 -->
+<div id="blackBoard" class="card text-white bg-secondary mb-3">
+    <div class="card-header">게시판
+        <button id="blackBordExit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+    </div>
+
+    <div id="bordList" class="card-body boardContent">
+
+        <div id="boardItem" class="card border-primary mb-3">
+
+            <div class="card-body">
+                <span id="postNum" class="badge badge-light">999</span>
+                <h4 id="postName" class="card-title">
+                    게시판 기능에 어서오세요 !
+                </h4>
+                
+                <div id="cardImageContents">
+                    <img class="cardImage" src="{% static 'OI_resource/images/jewel_purple.png'%}" alt="Card image">
+                </div>
+                <p id="postContents" class="card-text">글 쓰기 버튼을 통해서 자신의 이야기를 남겨 보세요</p>
+            </div>
+            <div class="card-header" title="postnum">
+                <small id="postDate" class="text-muted">2018-05-28</small>
+                <small id="postAuthor" class="text-muted">관리자 드림</small>
+            </div>
+
+        </div>
+ 
+    </div>
+    <div class="card-header" style="text-align : right;">
+        <button id="makePost" type="button" class="btn btn-primary btn-sm"> 글 쓰기</button>
+        <button id="postRefresh" type="button" class="btn btn-primary btn-sm"> 새로고침</button>
+    </div>
+</div>
+
+<!-- 게시판 폼 -->
+<div id="postForm"  class="card">
+    <form id="postUploadForm" name="postUploadForm">
+    <div class="card-body">
+        <div class="form-group">
+            <label class="col-form-label" for="inputDefault">제목</label>
+            <input id="postTitle" type="text" class="form-control" placeholder="Default input">
+        </div>
+        <div class="form-group">
+            <label for="exampleTextarea">내용</label>
+            <textarea id="postContent" class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 144px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputFile">사진</label>
+            <input type="file" class="form-control-file" id="postImage" aria-describedby="fileHelp">
+            <small id="fileHelp" class="form-text text-muted">파일의 최대 크기는 50mb 를 넘을 수 없습니다.</small>
+        </div>
+        <button id="postFormSave" type="button" class="btn btn-outline-primary">저장</button>
+        <button id="postFormExit" type="button" class="btn btn-outline-primary">취소</button>
+    </div>
+    </form>
+</div>
+<!-- 게시판 댓글 -->
+<div id="boardComment" class="card border-secondary mb-3" style="max-width: 20rem;">
+    <input type="hidden" id="selectedpostNum" value="default">
+    <div class="card-header">댓글
+        <button id="BCExit" type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+
+    <div id="BCBody" class="card-body">
+
+<!--         <div id="BCItem" class="alert alert-dismissible alert-info" title="'+response.name[i]+'">
+            <button id="BCDelete" type="button" class="close" data-dismiss="alert">&times;</button>
+            <div id="BCContents">'+response.commentData[i]+'</div>
+            <footer id="BCAuthor" class="blockquote-footer"> - '+response.name[i]+'</footer>
+        </div> -->
+
+
+    </div>
+    <div class="card-header">
+        <button id="BCCreate" type="button" class="btn btn-outline-secondary">댓글 쓰기</button>
+    </div>
+</div>
+
+<!-- 게시판 댓글 폼 -->
+<div id="commentForm" class="card">
+    <div class="card-body">
+
+        <div class="form-group">
+        <form id="commentUploadForm" name="commentUploadForm">
+            <label for="exampleTextarea">내용</label>
+            <textarea id="commentContent" class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 144px;"></textarea>
+        </form>
+        </div>
+
+        <button id="commentFormSave" type="button" class="btn btn-outline-primary">저장</button>
+        <button id="commentFormExit" type="button" class="btn btn-outline-primary">취소</button>
+    </div>
+</div>
+
+<!-- 플레이모드 갤러리 -->
+<div id="playFrameDiv" class="card text-white bg-secondary mb-3">
+    <div class="card-header">갤러리
+        <button id="playFrameExit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+    </div>
+    
+    <div class="card-body" style="max-height:600px;">
+        <div id="frameEvent" class="galleria2">
+        </div>
+    </div>
+    
+    <div id="imageBody" class="card-body">
+        <!-- frame 관련 div -->
+            <input type="hidden" id="isVisiting" value="false">
+            <button id="frameImage" type="button" class="btn btn-primary btn-sm">대표이미지로 설정 
+                <input type="hidden" id="targetFrame" value="null">
+            </button>
+            <button id="frameImageDelete" type="button" class="btn btn-primary btn-sm">이미지 삭제 
+            </button>
+        <div id="fileUpload">
+        <form id ="uploadForm" method="post" enctype="multipart/form-data"> 
+            <input type="file" name="file" id="id_file" multiple />
+            <button id="image_send" type="button" class="btn btn-primary btn-sm">업로드</button>
+        </form>
+        </div>
+    </div>
+</div>
+
+<!-- 플레이모드 비디오-->
+<div id="playVideoDiv" class="card text-white bg-secondary mb-3">
+    <div class="card-header">비디오
+        <button id="playVideoExit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+    </div>
+    <div class="card-body" style="max-height:600px; overflow:auto;">
+        <div id="tvEvent">
+        
+           <!-- 컨트롤러 -->
+           <button id="video_play" type="button" class="btn btn-primary btn-lg"> play </button>
+           <button id="video_pause" type="button" class="btn btn-primary btn-lg"> pause </button>
+           <button id="video_stop" type="button" class="btn btn-primary btn-lg"> stop </button>
+           <br>
+           
+            <table class="table table-hover" >
+                <thead>
+                    <tr>
+                        <th scope="col">번호</th>
+                        <th scope="col">제목</th>
+                    </tr>
+                </thead>
+                <tbody id="video_List" style="overflow:auto;">
+
+                </tbody>
+            </table>
+        
+        </div>
+    </div>
+    <div id="videoBody" class="card-body">
+    
+        <div id="fileUpload">
+        <form id ="vUploadForm" method="post" enctype="multipart/form-data"> 
+            <input type="file" name="file" id="id_vFile" multiple />
+            <button id="video_send" type="button" class="btn btn-primary btn-sm">업로드</button>
+        </form>
+            <button id="videoDelete" type="button" class="btn btn-primary btn-sm">비디오 삭제</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- 송식 -->
+<div id="target_msg" style="position:absolute; left: 10px; top:35px; background-color:cyan; display:none">
+타겟으로 설정할 에셋을 클릭하세요.</div>
+<div id=details class="card border-primary mb-3">
+   <div class="card-header">디테일 편집</div>
+    <div id="default_details" style="background-color:red; display:none">
+
+        에셋을 선택해주세요.
+
+    </div>
+    <div id="no_details" style="background-color:white; display:none">
+
+        디테일 편집을 할 수 없는 에셋입니다.
+
+    </div>
+    <div id="light_details" style="background-color:skyblue; display:none">
+        <h2>라이트 디테일
+        <input type='text' class="full"/>
+        </h2>
+        <div style="background-color:white">
+            세부 설정
+            <div id="light_intensity" style="background-color:pink;">
+                intensity(기본값 1)
+                <input id="intensity" type="range" min="1" max="10" step="0.1">
+                <input id="intensity_val" type="number" disabled><br>
+            </div>
+            
+            <div id="light_distance" style="background-color:green;">
+                 distance(기본값 100)
+                <input id="distance" type="range" min="1" max="300" step="1">
+                <input id="distance_val" type="number" disabled><br>
+            </div>
+            
+            <div id="light_angle">
+                angle(기본값 0.5)
+                <input id="angle" type="range" min="0.1" max="3" step="0.1">
+                <input id="angle_val" type="number" disabled><br>
+            </div>
+            <div id="light_target" style="background-color:pink">
+                <input id="setTarget" type="button" value="타겟 설정">
+            </div>
+        </div>
+    </div>
+    <div id="basic_details" style="background-color:pink; display:none">
+
+        <h2>색상 변경
+            <input type='text' class="full"/>
+        </h2>
+        <div id="changeTexture">
+            <h2>질감 변경</h2>
+            <div id="textures" class="galleria2"></div>
+        </div>
+        <input type="hidden" id="basic_texture">
+    </div>
+    <div id="common_details" style="background-color:red; display:none">
+        <div id="d_position" style="display:none">
+            position (X Y Z)
+            <input id="position_x" type="number">
+            <input id="position_y" type="number">
+            <input id="position_z" type="number"> <br>
+        </div>
+        <div id="d_rotation" style="display:none">
+            rotation (X Y Z)
+            <input id="rotation_x" type="number">
+            <input id="rotation_y" type="number">
+            <input id="rotation_z" type="number"> <br>
+        </div>
+        <div id="d_scale" style="display:none">
+            scale (X Y Z)
+            <input id="scale_x" type="number">
+            <input id="scale_y" type="number">
+            <input id="scale_z" type="number"> <br>
+        </div>
+
+        
+    </div>
+    <div id="transparent_details" style="background-color:gray; display:none">
+    transparent<br>
+        <input id="tr_check" type="checkbox" value="tr_val">
+        <label for="tr_check">투명</label><br>
+        
+        <div id="op_div">
+            opacity(0~1)
+            <input id="op_val" type="range" min="0" max="1" step="0.1">
+        </div>
+    </div>
+
+    <button id="basic_texture_change" class="btn btn-outline-primary">질감 적용</button>
+    <button id="modifyExit" class="btn btn-outline-primary">나가기</button>
+    
+</div>
+    
+<div id="header">
+    <!--a class="brand" href="{% static 'index.html'%}">HOMETERESTING</a-->
+    <a class="brand" href="https://www.oddidea.xyz">HOMETERESTING</a>
+    <!--img src="OI_resource/customHud/icons/down/southkorea(2).png" width="25px" height="25px" style="vertical-align: middle"-->
+    <div class=header-menu>
+        <a id="glogoutbutton" class="logouta" style="cursor: pointer;display:none">
+        <img src="{% static 'OI_resource/images/logout.png'%}" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+    </div>
+</div>
+<div id="content" class="content_canvas"></div>
+<div id="button" class="buttonLo">
+    <!--img id="imgButtonLo" src="OI_resource/customHud/icons/menu.png"-->
+    <img id="imgButtonLo" src="{% static 'OI_resource/images/jewel_purple.png'%}">
+</div>
+
+<div id="sideinfo">
+
+    <div id="homeMenue">
+<div id="iconLo1" class="icon"><img id="iconimg1" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg1.png'%}"></div>
+<div id="iconLo2" class="icon"><img id="iconimg2" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg2.png'%}"></div>
+<div id="iconLo3" class="icon"><img id="iconimg3" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg3.png'%}"></div>
+<div id="iconLo4" class="icon"><img id="iconimg4" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg4.png'%}"></div>
+<div id="iconLo5" class="icon"><img id="iconimg5" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg5.png'%}"></div>
+<div id="iconLo6" class="icon"><img id="iconimg6" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg6.png'%}"></div>
+<div id="iconLo7" class="icon"><img id="iconimg7" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg7.png'%}"></div>
+<div id="iconLo8" class="icon"><img id="iconimg8" class="iconimg" src="{% static 'OI_resource/images/test/icon/iconimg8.png'%}"></div>
+   
+    </div>
+    
+</div>
+
+<div id="asset" class="card text-white bg-secondary mb-3">
+    <div class="card-header">가구 배치
+        <button id="assetWindowExit" type="button" class="close" data-dismiss="alert" style="color:white;">&times;</button>
+    </div>   
+   <div id="assetExit" class ="exit"></div>
+    <div id="assetCategory" class="">
+        <!--클래스 ui-widget-content -->
+        <div id="categoryLo1" class="category"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/furnitures.jpg'%}"></div>
+        <div id="categoryLo2" class="category"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/ornaments.jpg'%}"></div>
+        <div id="categoryLo3" class="category"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/structure.jpg'%}"></div>
+        <div id="categoryLo4" class="category"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/wallpaper.jpg'%}"></div>
+<!--         <div id="searchSpace">검색기능
+ 
+        </div> -->
+    </div>
+
+    <div id="assetList">
+        <div id="preview"></div>
+        <div id="backArrow"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/backArrow.png'%}"></div>
+
+        <div id="addtoScene" class="addButton"><img id="iconimg" src="{% static 'OI_resource/customHud/icons/add.png'%}"></div>
+        <div id="bucketList" class="card border-info mb-3"></div>
+    </div>
+</div>
+
+<!-- 근빈 modal 추가 -->
+<!-- Save Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="MExit" class="close saveMClose">&times;</span>
+      <h2>Save as...</h2>
+    </div>
+      
+    <div class="modal-body">
+    <input id="roomName" type="text" name="roomName" placeholder="MyHome"/>
+    </div>
+      
+    <div id="saveCommit" class="saveCommit">
+      <span class="save">Save</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- confirm Modal -->
+<div id="deleteModal" class="modal">
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="MExit">&times;</span>
+      <h2>really sure?</h2>
+    </div>
+
+    <div class="modal-body">
+      <span id="deleteRoomName">your room data is unsafe</span>
+    </div>
+
+    <div class="Commit">
+      <span id="yesBtn" class="yes">Yes</span>
+      <span id="noBtn" class="no">No</span>
+    </div>
+  </div>
+
+</div>
+<!-- userNickName input Modal -->
+
+<div id="nickModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modalBack"><-</span>
+      <h2>처음 오셨군요!</h2>
+    </div>
+    <div class="modal-body">
+    	<p>사용하실 고유한 닉네임을 입력해주세요.</p>
+     <input id="userNickNameinput" type="text" name="userNickName" value="default" placeholder="input your nickname"/>
+    </div>
+    <div id="nicknameSave" class="saveCommit">
+      <span id="nicknameSave" class="save">Save</span>
+    </div>
+  </div>
+</div>
+    
+<!-- RTC 방 만들기 모달   -->
+<div id="RTCModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="RTCModalExit" class="close">x</span>
+      <h2>Create channel</h2>
+    </div>
+    <div class="modal-body">
+    	<p>방 이름을 입력해 주세요.</p>
+     <input id="RTCModalinput" type="text" name="userNickName" value="default" placeholder="input your nickname"/>
+    </div>
+    <div id="RTCModalinputCommit" class="saveCommit">
+      <span class="save">Start</span>
+    </div>
+  </div>
+</div>
+
+<!-- "혼자놀기" "같이놀기" 플레이 윈도우 부분 -->
+<div id="playWindow" class="card text-white bg-secondary mb-3">
+    <div class="navbar bg-primary">
+        <a class="navbar-brand">함께 놀기</a>
+        <div class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </div>
+    </div>
+    <div id="mulRoombody" class="card-body">
+     <p class="card-text">다른사람이 만든 방에서 함께 놀 수 있어요 !</p>
+        <button id="makeMulRoom" type="button" class="btn btn-primary btn-sm">방 만들기</button>
+        <button id="mulRoomRefresh" type="button" class="btn btn-primary btn-sm">새로고침</button>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Number</th>
+                    <th scope="col">Host</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">people</th>
+                </tr>
+            </thead>
+            <tbody id="multiRoomList">
+<!--                 <tr class="table-primary">
+                    <th scope="row">Primary</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr> -->
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="navbar bg-primary">
+        <a class="navbar-brand">혼자 놀기</a>
+        <div class="form-inline my-2 my-lg-0">
+            <input id="searchRoom" class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button id="dosearch" class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </div>
+    </div>
+    <div id="bodyupdate" class="card-body">
+        <p class="card-text">다른 사람들이 만든 방에 혼자 놀러갈수 있어요!</p>
+        <div id="searchingName" title="default">...님의 방 목록</div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Room Name</th>
+                    </tr>
+                </thead>
+                <tbody id="showJoinroom">
+                </tbody>
+            </table>
+    </div>
+</div>
+
+<!-- 멀티 플레이 방 만들기 Window -->
+<div id="creatWindow" class="card border-secondary mb-3">
+    <div class="card-header" style="font-size:18px">
+        함께할 방을 선택해 주세요
+ <button id="CWexit" type="button" class="close" data-dismiss="alert" style="color:black;">&times;</button>
+    </div>
+
+    <div id="CWcontents" class="card-body">
+<!--         <div id="roomBtn" class="card text-white bg-secondary mb-3" title="default">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+                <img style="height: 100px; width: 100%; display: block;" src="1.jpg" alt="Card image">
+            </div>
+        </div> -->
+    </div>
+</div>
+<!-- RTC window -->
+<div id="RTCWindow" class="card text-white bg-secondary mb-3">
+    <div class="navbar bg-primary" style="max-height : 50px;">
+        <a class="navbar-brand">채팅방</a>
+         <button id="RTCExit" type="button" class="close" data-dismiss="alert" style="color:white;">&times;</button>
+    </div>
+    <div class="card-body" style="text-align;overflow:auto;" >
+        
+     <p class="card-text">채팅방을 만들어 보세요</p>
+        <button id="makeRTCRoom" type="button" class="btn btn-primary btn-sm">방 만들기</button>
+        <button id="outRTCRoom" type="button" class="btn btn-primary btn-sm" style="display:none;">나가기</button>
+
+        <div class="form-inline my-2 my-lg-0">
+            <input id="RTCChannelSearch" class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button id="RTCChannelSearchSubmit" class="btn btn-secondary my-2 my-sm-0">입장</button>
+        </div>
+
+    </div>
+    <div class="navbar bg-primary">
+
+    </div>
+    <div class="card-body" id="multiCardBody">
+        <p class="card-text">멀티플레이 채팅방에 바로가기</p>
+        <button id="makeMulRTCRoom" type="button" class="btn btn-primary btn-sm">만들기</button>
+        <button id="joinMulRTCRoom" type="button" class="btn btn-primary btn-sm">참여</button>
+    </div>
+    <div class="card-body">
+        <span class="card-text">현재 참여중인 방은 : </span><span id="currentJoinRoomText">없음</span><br>
+        <!--<button id="chatDivOn" type="button" class="btn btn-primary btn-sm">채팅창 띄우기</button>-->
+    </div>
+</div>
+<!-- 채팅 창-->
+<div id='RTCKeyChatWindow' class="alert alert-dismissible alert-info" style="display:none">
+    <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+    
+    <div id="RTCKeyChatOutput">
+    </div>
+    <div id="RTCKeychatInput" class="form-group">
+        <input type="text" class="form-control" placeholder="go chat! " id="inputDefault">
+        <button id="RTCKeychatInputSummit" type="button" class="btn btn-outline-info">enter</button>
+    </div>
+</div>
+<!-- audio container test -->
+<div id='audioContainer' style="position:absolute; top:0px; left:0px; background-color:aqua; display:none;"></div>
+
+<!-- 송식 추가 -->
+<div id="ww"  style="background-color: transparent; position: absolute; top:100px; left:100px; width:80%; height:80%; display:none;">
+    
+   <div id="mySpaceExit" class="exit">&times;</div>
+
+<!--     <div id="profile" class="card text-white bg-secondary mb-3">
+              
+        <div class="card-header">프로필</div>
+               
+        <div id="profile_image">프사</div>
+        <p>아이디</p>
+                
+        <div class="">
+        <a id="logoutbutton" class="" style="cursor: pointer;">
+        <img src="" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+        </div>
+        <a>내용</a>
+    </div> -->
+            
+    <div id="contents" class="card text-white bg-secondary mb-3">
+        <!-- <div class="card-header">방 검색</div>
+
+        <div id="showJoinroom">
+        <input id="searchRoom" type="text" placeholder="other User Name">
+        <span id="dosearch" class="btn btn-primary">검색</span>
+        <div id="searchingName" title="default">...님의 방 목록</div>
+        </div> -->
+        <div class="card-header">내가 꾸민 공간</div>       
+        <div id="showMyspaces" style="overflow-y: auto"></div>
+    </div>
+            
+<!--     <div id="social" class="card text-white bg-secondary mb-3">
+        <div class="card-header">친구목록</div>
+    </div> -->
+</div>
+    
+<button id="mulExit" type="button" class="btn btn-outline-secondary" 
+        style="position:absolute; top:30px; display:none">Exit</button>
+   
+<div id="Stats-output"></div>
+	
+	<script type="text/javascript">
+		    var userNickName = $("#userNickName").val();
+	        //console.log("hello it's first : "+userNickName);
+
+	        if(userNickName == "default")
+	        {
+	            //MainCustomCam.dettachEvent();    // input 테그에 커서 정상작동
+	            //console.log("hello i'm in the if sentence");
+	            $("#nickModal").css("display","block");
+	        }
+	           
+	</script>
+    <script>
+     
+        function init()
+        {   
+            var prfileRoomData = document.getElementById("prfileRoomData").value;
+            //console.log("hello : " +prfileRoomData);
+
+            // 물리엔진 적용 관련
+            Physijs.scripts.worker = 'static/THREE_JS/js/physijs/physijs_worker.js';
+            Physijs.scripts.ammo = 'ammo.js';
+            
+            // 에셋 로딩, 객체 생성
+            var Assets = new AssetsLoader();
+            
+            // 씬 매니저 객체 생성
+            //var Manager = new SceneManager("user");
+            
+            // 프리뷰 씬 객체 생성
+            var PreviewScene = new PreviewSceneLoader(document.getElementById("preview"));
+            
+            // Asset Dictionary 생성
+            var Dictionary = new OI_AssetDic(Assets);
+            
+            // 메인룸 씬 객체 생성
+            var MainRoom = new MainSceneLoader(document.getElementById("content"));
+          
+            // Custom Camera
+            var MainCustomCam = new THREE.OddIdeaCamera( MainRoom.camera, MainRoom.renderer.domElement);
+            MainRoom.camera.lookAt(new THREE.Vector3(50,20,-50));
+            
+            // Frame Event 객체 생성
+            var FrameEvent = new OI_FrameEvent();
+            
+            // Video Event 객체 생성
+            var VideoEvent = new OI_VideoEvent();
+        
+            // Test Play 객체 생성
+            var TestPlay = new OI_TestPlay(document, MainRoom, FrameEvent, VideoEvent);
+            
+            // RTC 객체 생성
+            var oiRTC = new OI_RTC(MainCustomCam,TestPlay);
+  
+            // 이벤트 객체 생성 ---------------------------------------------*
+            var oiEvent = new OI_Event(document, Assets, PreviewScene, Dictionary,
+                                       MainCustomCam, MainRoom, TestPlay, FrameEvent, VideoEvent, oiRTC);
+
+        //    var PrevCustomCam = new THREE.OddIdeaCamera( PreviewScene.camera, PreviewScene.renderer.domElement);
+       //     PreviewScene.camera.lookAt(new THREE.Vector3(25,5,-25));
+            
+            // init profile room
+            var sceneManager = new SceneManager("user1");
+            sceneManager.sceneLoad(oiEvent, prfileRoomData);
+            
+            // *-----------------------------------------------------------*
+            function onResize()
+            {
+                MainRoom.update();
+                PreviewScene.update();
+                // 아웃라이너
+                oiEvent.composer.setSize( MainRoom.windowWidth, MainRoom.windowHeight );
+                oiEvent.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / MainRoom.windowWidth,
+                                                                      1 / MainRoom.windowHeight );
+            }
+            
+            $("#asset")[0].onresize = onResize
+            
+            window.addEventListener('resize', onResize, false); 
+            
+            /*
+            // Stats (performance) monitor
+            function initStats() {
+                var stats = new Stats();
+                stats.setMode(0); // 0: fps, 1: ms
+                // Align 
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.left = '0px';
+                stats.domElement.style.bottom = '150px';
+                document.getElementById("Stats-output").appendChild(stats.domElement);
+
+                return stats;
+            }
+            var stats = initStats();
+            */
+            
+//////////////////////////////////////////////////////////////////////////////////////////////
+            /*
+            //침대 종류 나열
+            var intaval=0;
+            
+            Promise.each(Assets.bedAsset,function(obj){
+                obj.position.set(intaval*40,5,-20);
+                obj.scale.set(10,10,10);
+                obj.name = "bed"+intaval;
+                MainRoom.scene.add(obj);
+                intaval++;
+            });
+            */
+            
+            /* 회전 프레임 테스트
+            
+            Assets.bedAsset[5].then(function(obj){
+               obj.position.set(30,5,0);
+                obj.scale.set(10,10,10);
+                MainRoom.scene.add(obj);
+            });
+            
+         
+            */
+            
+            var oiEventLoading = new Image();
+            oiEventLoading.src = 'https://www.oddidea.xyz/static/Jquery/images/ui-icons_444444_256x240.png';
+            oiEventLoading.onerror = function () { 
+                $('#oiEventLoading').val("true");
+            };
+            
+//////////////////////////////////////////////////////////////////////////////////////////////
+            var textureLoadingCnt;
+            function renderScene()
+            {
+                $(".galleria-errors").css("display","none");
+                
+                PreviewScene.renderer.render(PreviewScene.scene, PreviewScene.camera);
+              //  PrevCustomCam.update();
+                PreviewScene.moveCamera();
+              //  oiEvent.composer.render();
+                //stats.update();
+                
+                /* 회전 프레임 테스트
+                Assets.basic_detailssset[5].then(function(obj){
+                    obj.rotation.x+=0.2;
+                });
+                */
+                
+                // 조명 타겟 업데이트
+                if(oiEvent.needTargetUpdate){
+                    if(MainRoom.scene.children.length ===(oiEvent.nowRoomdata.assets.length+2)){
+                        oiEvent.targetUpdate();
+                    }
+                }
+
+                // play / edit // 
+				if ( TestPlay.isplaying ) {
+                    // 테스트 플레이 모드
+                    MainRoom.renderer.render(MainRoom.scene, MainRoom.tp_camera);
+                    TestPlay.update();
+    
+                    // 비디오 재생
+                    VideoEvent.updateFcts.forEach(function(updateFn, key){
+			             updateFn();
+                    });
+                    
+				}
+                else{
+                  // 편집 모드
+                    MainRoom.renderer.render(MainRoom.scene, MainRoom.camera);
+                    MainCustomCam.update();
+                    oiEvent.composer.render();
+                    
+                    // 조명 헬퍼 업데이트
+                    $.each(MainRoom.scene.children, function(key, value2){
+                        if(MainRoom.scene.children[key].name==="L_helper"){
+                            MainRoom.scene.children[key].update();
+                            //console.log("helper update");
+                        }
+                    }); 
+                    
+                }
+                
+                // 로딩 페이지
+                if(oiEvent.needLoading ){
+                    //oiEvent.loading();
+                    
+                //    $("#OIloading").css("display","block");
+                  //  $("#OIloading")[0].style.display = "block";
+                    if(TestPlay.isplaying){
+                        if(!oiEvent.isMultiplaying){
+                            oiEvent.modeChange();
+                        }
+                    }
+                    
+                    var percent = Math.floor((MainRoom.scene.children.length / (oiEvent.nowRoomdata.assets.length+2)) * 100);
+                    var width = percent.toString()+"%";                         // +2 : ambient light, Object3D - 뭔지모르겠음
+                    
+                    // 텍스쳐 로딩 여부
+                    if($("#LoadingDoOnce").val()==="true"){
+                        MainRoom.PhysicsOFF();
+                        textureLoadingCnt = 0;
+                        for(var i=0; i<oiEvent.nowRoomdata.assets.length; i++){
+                            if(oiEvent.nowRoomdata.assets[i].name.substring(0,5)==="basic"){
+                                if(oiEvent.nowRoomdata.assets[i].map!=="null")
+                                    textureLoadingCnt+=1;
+                            }
+                        }
+                        //console.log(textureLoadingCnt);
+                        $("#LoadingDoOnce").val("false");
+                    }
+                    
+                    var curTextureCnt = 0;
+                    for(var i=0; i<MainRoom.scene.children.length; i++){
+                        if(MainRoom.scene.children[i].name.substring(0,5)==="basic"){
+                            if(MainRoom.scene.children[i].material.map!==null){
+                                curTextureCnt+=1;
+                            }
+                        }
+                        //console.log(curTextureCnt);
+                        if(curTextureCnt==textureLoadingCnt){
+                            $("#oiTextureLoading").val("true");
+                            //console.log("texture loading complete");
+                        }
+                    }
+
+                    $("#OIloading-bar").css("width", width);
+
+                    if(percent>=100){
+                        if($('#oiEventLoading').val()==="false" && $("#oiTextureLoading").val()==="true")
+                            document.getElementById("OIloading-bar").innerHTML = '이벤트 로딩중';  
+                        else if($('#oiEventLoading').val()==="true" && $("#oiTextureLoading").val()==="false")
+                            document.getElementById("OIloading-bar").innerHTML = '텍스쳐 로딩중';  
+                        else if($('#oiEventLoading').val()==="false" && $("#oiTextureLoading").val()==="false")
+                            document.getElementById("OIloading-bar").innerHTML = '이벤트와 텍스쳐 로딩중';  
+                    }
+                    else
+                        document.getElementById("OIloading-bar").innerHTML = width; 
+                   
+                  //  console.log(percent);
+                    //console.log(textureLoadingCnt);
+                    
+                    if(percent>=100 && $('#oiEventLoading').val() === "true" && $("#oiTextureLoading").val()==="true"){  
+                        // 텍스쳐 갯수에 따라 적용되는 시간 조절
+                        if(textureLoadingCnt<10){
+                            setTimeout(function(){
+                                //$("#OIloading").css("display","none");
+                                $("#OIloading").hide("fade", {}, "slow");
+                            },3000);
+                        }
+                        else if(textureLoadingCnt<20){
+                            setTimeout(function(){
+                                //$("#OIloading").css("display","none");
+                                $("#OIloading").hide("fade", {}, "slow");
+                            },5000);
+                        }
+                        else{
+                            setTimeout(function(){
+                                //$("#OIloading").css("display","none");
+                                $("#OIloading").hide("fade", {}, "slow");
+                            },9000);
+                        }
+                        
+                        oiEvent.needLoading = false;
+                        //$('#oiEventLoading').val("false");
+                    }
+                }
+              
+                requestAnimationFrame(renderScene);
+            }
+            //sceneManager.sceneLoad(oiEvent, prfileRoomData);
+            renderScene();
+            if(userNickName == "default")
+            {
+                MainCustomCam.dettachEvent();    // input 태그에 커서 정상작동
+            }
+        };
+        
+        window.onload = init;
+
+        // userNickName 맨 처음 받아오도록 한다
+        
+
+    </script>
+</body>
+<script type="text/javascript" src="{% static 'OI_resource/OI_js/OI_UI.js'%}"></script>
+</html>

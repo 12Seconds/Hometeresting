@@ -1,0 +1,54 @@
+fs.js:663
+  return binding.open(pathModule.toNamespacedPath(path),
+                 ^
+
+Error: EACCES: permission denied, open '/etc/letsencrypt/live/www.oddidea.xyz/privkey.pem'
+    at Object.fs.openSync (fs.js:663:18)
+    at Object.fs.readFileSync (fs.js:568:33)
+    at Object.<anonymous> (/home/ec2-user/node_modules/rtcmulticonnection-v3/server.js:23:11)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3)
+    at Function.Module.runMain (module.js:701:10)
+    at startup (bootstrap_node.js:194:16)
+fs.js:663
+  return binding.open(pathModule.toNamespacedPath(path),
+                 ^
+
+Error: EACCES: permission denied, open '/etc/letsencrypt/live/www.oddidea.xyz/privkey.pem'
+    at Object.fs.openSync (fs.js:663:18)
+    at Object.fs.readFileSync (fs.js:568:33)
+    at Object.<anonymous> (/home/ec2-user/node_modules/rtcmulticonnection-v3/server.js:23:11)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3)
+    at Function.Module.runMain (module.js:701:10)
+    at startup (bootstrap_node.js:194:16)
+fs.js:663
+  return binding.open(pathModule.toNamespacedPath(path),
+                 ^
+
+Error: EACCES: permission denied, open '/etc/letsencrypt/live/www.oddidea.xyz/privkey.pem'
+    at Object.fs.openSync (fs.js:663:18)
+    at Object.fs.readFileSync (fs.js:568:33)
+    at Object.<anonymous> (/home/ec2-user/node_modules/rtcmulticonnection-v3/server.js:23:11)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3)
+    at Function.Module.runMain (module.js:701:10)
+    at startup (bootstrap_node.js:194:16)
+------------------------------
+socket.io is listening at:
+[31m	https://localhost:9001/[0m 
+
+
+Your web-browser (HTML file) MUST set this line:
+[31mconnection.socketURL = "https://localhost:9001/";[0m 
+------------------------------
+Need help? http://bit.ly/2ff7QGk

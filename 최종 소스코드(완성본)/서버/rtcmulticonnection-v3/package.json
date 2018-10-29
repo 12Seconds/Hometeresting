@@ -1,0 +1,111 @@
+{
+  "_from": "rtcmulticonnection-v3",
+  "_id": "rtcmulticonnection-v3@3.4.4",
+  "_inBundle": false,
+  "_integrity": "sha1-MSD2/W09+pd2WjYmDfyUvyyVq3k=",
+  "_location": "/rtcmulticonnection-v3",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "rtcmulticonnection-v3",
+    "name": "rtcmulticonnection-v3",
+    "escapedName": "rtcmulticonnection-v3",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/rtcmulticonnection-v3/-/rtcmulticonnection-v3-3.4.4.tgz",
+  "_shasum": "3120f6fd6d3dfa97765a36260dfc94bf2c95ab79",
+  "_spec": "rtcmulticonnection-v3",
+  "_where": "/home/ec2-user",
+  "analyze": false,
+  "author": {
+    "name": "Muaz Khan",
+    "email": "muazkh@gmail.com",
+    "url": "http://www.muazkhan.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/muaz-khan/RTCMultiConnection/issues",
+    "email": "muazkh@gmail.com"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "forever-service": "^0.5.11",
+    "socket.io": "latest",
+    "sqlite3": "^4.0.0"
+  },
+  "deprecated": false,
+  "description": "RTCMultiConnection is a WebRTC JavaScript wrapper library runs top over RTCPeerConnection API to support all possible peer-to-peer features.",
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "grunt-bump": "0.7.0",
+    "grunt-cli": "0.1.13",
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-concat": "0.5.1",
+    "grunt-contrib-copy": "0.8.2",
+    "grunt-contrib-uglify": "0.11.0",
+    "grunt-jsbeautifier": "0.2.10",
+    "grunt-replace": "0.11.0",
+    "load-grunt-tasks": "3.4.0"
+  },
+  "engines": {
+    "node": "7.0.0"
+  },
+  "homepage": "https://rtcmulticonnection.herokuapp.com/",
+  "keywords": [
+    "peer-to-peer",
+    "peer2peer",
+    "peer",
+    "webrtc",
+    "rtcmulticonnection",
+    "webrtc-library",
+    "library",
+    "javascript",
+    "chrome",
+    "firefox",
+    "opera",
+    "ie",
+    "internet-explorer",
+    "android",
+    "rtcweb",
+    "rtcmulticonnection.js",
+    "multirtc",
+    "webrtc-experiment",
+    "javascript-library",
+    "muaz",
+    "muaz-khan"
+  ],
+  "license": "MIT",
+  "main": "RTCMultiConnection.js",
+  "name": "rtcmulticonnection-v3",
+  "preferGlobal": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muaz-khan/RTCMultiConnection.git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "3.4.4",
+  "warnings": [
+    {
+      "code": "ENOTSUP",
+      "required": {
+        "node": "7.0.0"
+      },
+      "pkgid": "rtcmulticonnection-v3@3.4.4"
+    },
+    {
+      "code": "ENOTSUP",
+      "required": {
+        "node": "7.0.0"
+      },
+      "pkgid": "rtcmulticonnection-v3@3.4.4"
+    }
+  ]
+}
