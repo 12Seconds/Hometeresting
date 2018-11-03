@@ -25,3 +25,4 @@ Team ODD - IDEA (O.I)
 - 실제 동작 URL : https://www.oddidea.xyz/
 
 # Demo Video
+- http://mikabin.tistory.com/3
