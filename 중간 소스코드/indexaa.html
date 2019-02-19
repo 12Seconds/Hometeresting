@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--google sign in api data-->
+    <meta name="google-signin-client_id" content="704942629803-0lmb02ue4muobav2o1p6khrcmr7trbrf.apps.googleusercontent.com">
+    <title>Hometeresting</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="bootstrap/css/creative.min.css" rel="stylesheet">
+    
+    
+    <style>
+        html{
+            overflow-x: hidden;
+        }
+      </style>
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-color:black;">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">HOMETERESTING</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">
+              <img src="OI_resource/images/about.png" width="25px" height="25px" style="vertical-align: middle">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#services">
+              <img src="OI_resource/images/service1.png" width="25px" height="25px" style="vertical-align: middle">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#portfolio">
+              <img src="OI_resource/images/example2.png" width="25px" height="25px" style="vertical-align: middle">Examples</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contact">
+              <img src="OI_resource/images/developer.png" width="25px" height="25px" style="vertical-align: middle">Developer</a>
+            </li>
+            
+            <li class="nav-item">
+              <a id="loginbutton" class="nav-link logina" style="cursor: pointer">
+              <img src="OI_resource/images/login.png" width="25px" height="25px" style="vertical-align: middle">Login</a>
+            </li>
+
+
+            <li class="nav-item" style="">
+              <a id="glogoutbutton" class="nav-link logouta" style="cursor: pointer;display:none">
+              <img src="OI_resource/images/logout.png" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+            </li>
+            <li class="nav-item" style="">
+              <a id="flogoutbutton" class="nav-link logouta" style="cursor: pointer;display:none">
+              <img src="OI_resource/images/logout.png" width="25px" height="25px" style="vertical-align: middle">Logout</a>
+            </li>
+                           
+            <li class="nav-item">
+              <a id="myhomebutton" class="nav-link myhomea" style="cursor: pointer; display:none">
+              <img src="OI_resource/images/home_pink.png" width="25px" height="25px" style="vertical-align: middle">My home</a>
+            </li>
+            
+            <li class="nav-item">
+              <a id="showID" class="nav-link logina" style="cursor:default;text-transform: none; display:none">user</a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Share Your GaemSung</strong>
+            </h1>
+            <h2 style="color:#ffff00"><string>당신의 감성을 마음껏 표현해보세요.</string></h2>
+            <hr>
+          </div>
+          <div class="col-lg-8 mx-auto">    
+            <p class="text-faded mb-5" style="color:skyblue">YOU ARE SPACE BOHEMIAN</p>  <!--당신의 감성을-->
+    
+            <a class="btn btn-primary btn-xl js-scroll-trigger sr-button" href="#about">알아보기</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="bg-primary" id="about">
+    <div id="about_bg"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-white">Hometeresting</h2>
+            <h5 class="section-heading text-white">dream your universe</h5> <!-- 감성을 나누는? -->
+            <hr class="light my-4">
+            <p class="text-faded mb-1">홈터레스팅은 새로운 형태의 소셜 네트워크서비스입니다.<br>
+            꾸준히 발전해 온 웹 페이지 기반의 재미있는 기술들을 일반 사용자들에게 소개하는것은 물론<br>여러가지 기술 요소들을 융합하고 컨텐츠화 하여 신선한 재미를 주고자 개발하게 되었습니다.</p>
+            <!--p class="text-faded mb-1">앞으로 만나게 될 무한한 기술의 우주에서 마음껏 헤엄치기 위해서 미리 당신의 감성을 키워보세요.</p-->
+            
+            <!--a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a-->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading">Services</h2>
+            <hr class="my-4">
+            <p class="text-faded mb-4" style="color:#A566FF">abc</p>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-diamond text-primary mb-3 sr-icons"></i>
+              <h3 class="mb-3">Sturdy Templates</h3>
+              <p class="text-muted mb-0">Our templates are updated regularly so they don't break.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-paper-plane text-primary mb-3 sr-icons"></i>
+              <h3 class="mb-3">Ready to Ship</h3>
+              <p class="text-muted mb-0">You can use this theme as is, or you can make changes!</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-newspaper-o text-primary mb-3 sr-icons"></i>
+              <h3 class="mb-3">Up to Date</h3>
+              <p class="text-muted mb-0">We update dependencies to keep things fresh.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-heart text-primary mb-3 sr-icons"></i>
+              <h3 class="mb-3">Made with Love</h3>
+              <p class="text-muted mb-0">You have to make your websites with love these days!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-0 bg-dark" id="portfolio">
+        <div class="container">
+            <div class="row">
+              <div class="col-lg-12 text-center" style="color:white">
+               <br>
+                <h2 class="section-heading">examples</h2>
+                <hr class="my-4">
+              </div>
+            </div>
+        </div>
+      <div class="container-fluid p-0">
+        <div class="row no-gutters popup-gallery">
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/1.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/1.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name1
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/2.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/2.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name2
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/3.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/3.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name3
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!--div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/4.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/4.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name4
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/5.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/5.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name5
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="bootstrap/img/portfolio/fullsize/6.jpg">
+              <img class="img-fluid" src="bootstrap/img/portfolio/thumbnails/6.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name6
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div-->
+      </div>
+      <div class="container text-center">
+       <br>
+        <h2 class="mb-4" style="color:white">당신의 공간을 멋지게 꾸며보세요!</h2>
+         <p class="text-muted mb-0">일반적인 방 디자인뿐만 아니라 VR롤러코스터와 미니게임까지 원하는대로 직접 만들수 있습니다.</p><br>
+        <a class="btn btn-primary btn-xl sr-button" href="">마이홈으로 이동</a>
+        <br><br>
+      </div>
+    </section>
+
+    <!--section id="contact"-->
+      <div id="contact" class="container">
+       <br>
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+    
+            <h2 class="section-heading">Team ODD-IDEA</h2>
+            <hr class="my-4">
+            <img class="sr-button" src="OI_resource/images/cube_cat.png" width="240px" height="240px">
+      
+            <p class="mb-3">Korea Polytechnic University</p>
+            <p class="mb-3">배근빈 | 이인행 | 황송식</p>
+            <!--p class="mb-3">CONTACT</p-->
+            <br><br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 ml-auto text-center sr-button">
+            <!--i class="fa fa-phone fa-3x mb-3 sr-contact"></i-->
+            <img src="OI_resource/images/kakaoicon.png" width="50px" height="50px"><br><br>
+            <p style="color:#FFCF40">kakao id : axolotles</p>
+          </div>
+          <div class="col-lg-4 mr-auto text-center sr-button">
+            <!--i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i-->
+            <img src="OI_resource/images/mail.png" width="50px" height="50px"><br><br>
+            <p> <a href="mailto:your-email@your-domain.com">hwangsongsik@gmail.com</a></p>
+             
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 mx-auto text-center">
+               <br>
+                <p class="mb-3" style="color:#FC83D4">&copy; 2018 ODD-IDEA all rights reserved.</p>
+            </div>
+        </div>
+       
+      </div>
+    <!--/section-->
+
+    <div class="" style="">
+        <div id="select_login" class="" style="display:none;">
+            <div id="xbutton" style="position:relative; top:10px"><img src="OI_resource/images/xicon.png" width="15px" height="15px"></img></div>
+            <div class="fb_lo">
+                <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" onlogin="checkLoginState();"></div>
+            </div>
+            <div class="g_lo">
+                <div id="my-signin2"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+   
+    <!--div id="select_login" class=" my-auto">사이드<br>로그인<br>페이지</div-->
+   
+    <!-- Bootstrap core JavaScript -->
+    <script src="bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="bootstrap/vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="bootstrap/js/creative.min.js"></script>
+    <script type="text/javascript" src="Jquery/jquery-ui.js"></script>
+    
+
+
+     <script>
+        
+          function signOut() { // 구글 로그아웃 처리
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                
+              console.log('google User signed out.');
+                location.reload();
+            });
+          }
+         
+          $( "#glogoutbutton" ).on( "click", function() { signOut(); });
+         
+         
+          function fblogout(){ // 페북 로그아웃 처리
+              FB.logout(function(response) {
+              console.log('facebook User signed out.');
+                location.reload();
+                });
+          }
+          $( "#flogoutbutton" ).on( "click", function() { fblogout(); });
+     </script>
+     
+      <script>
+        function onSuccess(googleUser) { // 구글 로그인 성공
+          console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+            $("#loginbutton").css('display','none');
+            $("#showID").html(googleUser.getBasicProfile().getName()+"님 안녕하세요.");
+            $("#showID").css('display','block');
+            $("#glogoutbutton").css('display','block');
+            $("#myhomebutton").css('display','block');
+            $("#select_login" ).css('display','none');
+           // $( "#select_login" ).toggle( "drop", {direction: 'right'}, 500 );
+        }
+        function onFailure(error) { // 필요없어!
+          console.log(error);
+        }
+        function renderButton() {
+        console.log("hihi render");
+          gapi.signin2.render('my-signin2', {
+            'scope': 'profile email',
+            'width': 235,
+            'height': 37,
+            'longtitle': true,
+            'theme': 'dark',
+            'onsuccess': onSuccess,
+            'onfailure': onFailure
+          });
+        }
+      </script>
+      <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+      
+      <!-- Facebook sign in SDK setting -->
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '1567413106707268',
+            //  redirection_url:"https://www.oddidea.xyz",
+              cookie     : true,
+              xfbml      : true,
+              version    : 'v2.11'
+            });
+
+            FB.AppEvents.logPageView();   
+              
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+              
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "https://connect.facebook.net/ko_KR/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+            
+              function checkLoginState() {
+                  console.log("체크 로그인 상태.");
+                FB.getLoginStatus(function(response) {
+                  statusChangeCallback(response);
+                });
+              }
+            
+        function statusChangeCallback(response) {
+            
+            console.log('statusChangeCallback');
+            console.log(response);
+            // The response object is returned with a status field that lets the
+            // app know the current login status of the person.
+            // Full docs on the response object can be found in the documentation
+            // for FB.getLoginStatus().
+            if (response.status === 'connected') {
+              // Logged into your app and Facebook.
+                FB.api('/me', {fields: 'first_name'}, function(response) {
+                    $("#showID").html(response.first_name+"님 안녕하세요.");
+                });
+                
+                console.log("페북로그인 성공후");
+                $("#loginbutton").css('display','none');
+          
+                $("#showID").css('display','block');
+                $("#flogoutbutton").css('display','block');
+                $("#myhomebutton").css('display','block');
+                $("#select_login" ).css('display','none');
+               
+
+            } else {
+              // The person is not logged into your app or we are unable to tell.
+              document.getElementById('status').innerHTML = 'Please log ' +
+                'into this app.';
+            }
+          }
+        
+            
+        </script>  
+         
+    <script>
+        $( function() {
+            // run the currently selected effect
+            function runEffect() {
+         
+            // Run the effect
+            //console.log(window.scrollY);
+
+            $( "#select_login" ).toggle( "drop", {direction: 'right'}, 500 );
+            // $( "#select_login" ).style.top=document.body.scrollTop;
+            };
+
+            // Set effect from select menu value
+            $( "#loginbutton" ).on( "click", function() {
+                runEffect();
+            });
+            
+            $( "#xbutton" ).on( "click", function() {
+                runEffect();
+            });
+        } );
+        
+        function onSignIn(googleUser) {
+          var profile = googleUser.getBasicProfile();
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('Name: ' + profile.getName());
+          console.log('Image URL: ' + profile.getImageUrl());
+          console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+
+  </script>
+       
+    
+  </body>
+
+</html>
